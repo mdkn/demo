@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+[role="row"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+  background-color: #eff6ff;
+}
+
+[role="gridcell"]:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+  background-color: #eff6ff;
+}
+
+/* Remove default focus styles when using custom ones */
+[role="row"]:focus-visible,
+[role="gridcell"]:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
