@@ -1,0 +1,51 @@
+// M026-M031: Header component styles
+@use '../styles/variables' as vars;
+@use '../styles/mixins' as mix;
+
+.header {
+  flex-shrink: 0;
+  background: linear-gradient(to right, vars.$primary-600, vars.$primary-700);
+  color: vars.$white;
+  box-shadow: vars.$shadow-md;
+}
+
+.container {
+  @include mix.flex-between;
+  padding: vars.$spacing-4 vars.$spacing-6;
+}
+
+.title {
+  font-size: vars.$text-2xl;
+  font-weight: vars.$font-bold;
+}
+
+.stats {
+  display: flex;
+  gap: vars.$spacing-6;
+  font-size: vars.$text-sm;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: vars.$spacing-2;
+}
+
+.label {
+  font-weight: vars.$font-semibold;
+}
+
+.badge {
+  @include mix.badge;
+  font-weight: vars.$font-bold;
+
+  &.total {
+    background-color: rgba(vars.$white, 0.2);
+    color: vars.$white;
+  }
+
+  &.unread {
+    background-color: vars.$yellow-400;
+    color: vars.$primary-900;
+  }
+}

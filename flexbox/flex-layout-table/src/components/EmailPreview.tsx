@@ -1,27 +1,20 @@
-// T060-T069: Email preview panel component
+// EmailPreview component with SCSS Modules
 import type { Email } from '../types/email'
+import styles from './EmailPreview.module.scss'
 
 interface EmailPreviewProps {
   email: Email
-  className?: string
 }
 
-export default function EmailPreview({ email, className = '' }: EmailPreviewProps) {
+export default function EmailPreview({ email }: EmailPreviewProps) {
   return (
-    // T061-T062: Preview panel container with flex-1 and scrollable
-    // T069: Styling with padding and border-left (panel is on the right)
-    <div className={`overflow-auto border-l border-gray-300 bg-white p-6 ${className}`}>
-      {/* T063: Sender name display (large, prominent) */}
-      <h2 className="text-2xl font-bold text-gray-900">{email.senderName}</h2>
+    <div className={styles.previewContainer}>
+      <h2 className={styles.senderName}>{email.senderName}</h2>
+      <p className={styles.senderEmail}>{email.senderEmail}</p>
 
-      {/* T064: Sender email display (smaller, gray) */}
-      <p className="mt-1 text-sm text-gray-600">{email.senderEmail}</p>
+      <h3 className={styles.subject}>{email.subject}</h3>
 
-      {/* T065: Subject line (bold, text-xl) */}
-      <h3 className="mt-4 text-xl font-bold text-gray-800">{email.subject}</h3>
-
-      {/* T066: Date/time display */}
-      <p className="mt-2 text-sm text-gray-500">
+      <p className={styles.date}>
         {new Date(email.date).toLocaleString('en-US', {
           weekday: 'short',
           year: 'numeric',
@@ -33,34 +26,17 @@ export default function EmailPreview({ email, className = '' }: EmailPreviewProp
         })}
       </p>
 
-      {/* T067: Read/unread badge */}
-      <div className="mt-3">
+      <div className={styles.badgeContainer}>
         <span
-          className={`
-            inline-block
-            rounded-full
-            px-3
-            py-1
-            text-xs
-            font-semibold
-            ${
-              email.isRead
-                ? 'bg-gray-200 text-gray-700'
-                : 'bg-blue-100 text-blue-700'
-            }
-          `}
+          className={`${styles.badge} ${email.isRead ? styles.read : styles.unread}`}
         >
           {email.isRead ? '✓ Read' : '● Unread'}
         </span>
       </div>
 
-      {/* Divider */}
-      <hr className="my-6 border-gray-200" />
+      <hr className={styles.divider} />
 
-      {/* T068: Preview text display with whitespace preservation */}
-      <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-        {email.previewText}
-      </div>
+      <div className={styles.previewText}>{email.previewText}</div>
     </div>
   )
 }

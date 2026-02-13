@@ -1,0 +1,16 @@
+// M021-M023: App component styles
+@use '../styles/variables' as vars;
+
+// M022: Vertical flexbox layout
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+// M023: Main content area
+.main {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
+}

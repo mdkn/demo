@@ -1,0 +1,22 @@
+// M043-M046: EmailTableHeader component styles
+@use '../styles/variables' as vars;
+
+.tableHeader {
+  position: sticky;
+  top: 0;
+  z-index: vars.$z-sticky;
+  border-bottom: 2px solid vars.$gray-300;
+  background-color: vars.$white;
+}
+
+.headerRow {
+  // Row styles if needed
+}
+
+.headerCell {
+  padding: vars.$spacing-3 vars.$spacing-4;
+  text-align: left;
+  font-size: vars.$text-sm;
+  font-weight: vars.$font-semibold;
+  color: vars.$gray-700;
+}

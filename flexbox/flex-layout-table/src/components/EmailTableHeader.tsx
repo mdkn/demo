@@ -1,24 +1,14 @@
-// T034-T038: Sticky table header component
+// EmailTableHeader component with SCSS Modules
+import styles from './EmailTableHeader.module.scss'
+
 export default function EmailTableHeader() {
   return (
-    // T035: thead element with sticky positioning
-    // T037: Sticky positioning with z-index
-    // T038: Background and border
-    <thead className="sticky top-0 z-10 border-b-2 border-gray-300 bg-white">
-      <tr>
-        {/* T036: Column headers */}
-        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-          Sender
-        </th>
-        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-          Subject
-        </th>
-        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-          Date
-        </th>
-        <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-          Status
-        </th>
+    <thead className={styles.tableHeader}>
+      <tr className={styles.headerRow}>
+        <th className={styles.headerCell}>Sender</th>
+        <th className={styles.headerCell}>Subject</th>
+        <th className={styles.headerCell}>Date</th>
+        <th className={styles.headerCell}>Status</th>
       </tr>
     </thead>
   )

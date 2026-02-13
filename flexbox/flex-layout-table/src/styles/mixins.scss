@@ -1,0 +1,74 @@
+// M012-M016: SCSS Mixins
+@use './variables' as vars;
+
+// M013: Flexbox mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+// M014: Text truncation
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// M015: Badge component
+@mixin badge {
+  display: inline-block;
+  border-radius: vars.$rounded-full;
+  padding: vars.$spacing-1 vars.$spacing-2;
+  font-size: vars.$text-xs;
+  font-weight: vars.$font-semibold;
+}
+
+// M016: Scrollable container
+@mixin scrollable {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: vars.$gray-100;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: vars.$gray-300;
+    border-radius: vars.$rounded;
+
+    &:hover {
+      background: vars.$gray-400;
+    }
+  }
+}
+
+// Additional utility mixins
+@mixin transition($property: all) {
+  transition: $property vars.$transition-base ease-in-out;
+}
+
+@mixin hover-lift {
+  transition: transform vars.$transition-fast ease-in-out;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+}

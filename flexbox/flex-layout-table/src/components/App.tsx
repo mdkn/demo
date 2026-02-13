@@ -1,10 +1,11 @@
-// T027-T033: Main App component with vertical flexbox layout
+// App component with SCSS Modules
 import { useState, useMemo } from 'react'
 import type { Email } from '../types/email'
 import Header from './Header'
 import Footer from './Footer'
 import EmailTable from './EmailTable'
 import EmailPreview from './EmailPreview'
+import styles from './App.module.scss'
 // Import emails data
 import emailsData from '../data/emails.json'
 
@@ -29,30 +30,20 @@ export default function App() {
   )
 
   return (
-    // T030: Main layout structure - vertical flexbox with h-screen
-    <div className="flex h-screen flex-col">
-      {/* T031: Header with email stats */}
+    <div className={styles.app}>
       <Header stats={stats} />
 
-      {/* T032: Main content area - flex-1 with overflow-hidden */}
-      {/* T070: Update to support horizontal flexbox */}
-      <main className="flex flex-1 overflow-hidden">
-        {/* T058-T059: EmailTable on the LEFT with conditional width */}
+      <main className={styles.main}>
         <EmailTable
           emails={emails}
           selectedEmailId={selectedEmailId}
           onSelectEmail={setSelectedEmailId}
-          className={selectedEmail ? 'flex-1' : 'w-full'}
+          isPreviewOpen={!!selectedEmail}
         />
 
-        {/* T071: Conditional rendering for EmailPreview on the RIGHT */}
-        {/* T072: 50/50 split layout using flex-1 on both containers */}
-        {selectedEmail && (
-          <EmailPreview email={selectedEmail} className="flex-1" />
-        )}
+        {selectedEmail && <EmailPreview email={selectedEmail} />}
       </main>
 
-      {/* T033: Footer */}
       <Footer />
     </div>
   )

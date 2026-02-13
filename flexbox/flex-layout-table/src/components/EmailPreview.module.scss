@@ -1,0 +1,67 @@
+// M062-M071: EmailPreview component styles
+@use '../styles/variables' as vars;
+@use '../styles/mixins' as mix;
+
+.previewContainer {
+  @include mix.scrollable;
+  flex: 1;
+  border-left: 1px solid vars.$gray-300;
+  background-color: vars.$white;
+  padding: vars.$spacing-6;
+}
+
+.senderName {
+  font-size: vars.$text-2xl;
+  font-weight: vars.$font-bold;
+  color: vars.$gray-900;
+}
+
+.senderEmail {
+  margin-top: vars.$spacing-1;
+  font-size: vars.$text-sm;
+  color: vars.$gray-600;
+}
+
+.subject {
+  margin-top: vars.$spacing-4;
+  font-size: vars.$text-xl;
+  font-weight: vars.$font-bold;
+  color: vars.$gray-800;
+}
+
+.date {
+  margin-top: vars.$spacing-2;
+  font-size: vars.$text-sm;
+  color: vars.$gray-500;
+}
+
+.badgeContainer {
+  margin-top: vars.$spacing-3;
+}
+
+.badge {
+  @include mix.badge;
+  font-weight: vars.$font-semibold;
+
+  &.read {
+    background-color: vars.$gray-200;
+    color: vars.$gray-700;
+  }
+
+  &.unread {
+    background-color: vars.$primary-100;
+    color: vars.$primary-700;
+  }
+}
+
+.divider {
+  margin: vars.$spacing-6 0;
+  border: 0;
+  border-top: 1px solid vars.$gray-200;
+}
+
+.previewText {
+  white-space: pre-wrap;
+  color: vars.$gray-700;
+  line-height: vars.$leading-relaxed;
+}

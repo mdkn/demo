@@ -1,0 +1,72 @@
+// M049-M058: EmailRow component styles
+@use '../styles/variables' as vars;
+@use '../styles/mixins' as mix;
+
+.row {
+  cursor: pointer;
+  border-bottom: 1px solid vars.$gray-200;
+  @include mix.transition(background-color);
+
+  &:hover {
+    background-color: vars.$gray-100;
+  }
+
+  &.selected {
+    border-left: 4px solid vars.$primary-500;
+    background-color: vars.$primary-50;
+  }
+
+  &.unread {
+    font-weight: vars.$font-semibold;
+  }
+}
+
+.senderCell {
+  padding: vars.$spacing-3 vars.$spacing-4;
+  max-width: 16rem;
+}
+
+.senderName {
+  @include mix.truncate;
+}
+
+.senderEmail {
+  @include mix.truncate;
+  font-size: vars.$text-sm;
+  color: vars.$gray-500;
+}
+
+.subjectCell {
+  padding: vars.$spacing-3 vars.$spacing-4;
+}
+
+.subjectText {
+  @include mix.truncate;
+  max-width: 28rem;
+}
+
+.dateCell {
+  padding: vars.$spacing-3 vars.$spacing-4;
+  font-size: vars.$text-sm;
+  color: vars.$gray-600;
+  width: 5rem;
+}
+
+.statusCell {
+  padding: vars.$spacing-3 vars.$spacing-4;
+}
+
+.badgeRead,
+.badgeUnread {
+  @include mix.badge;
+}
+
+.badgeRead {
+  background-color: vars.$gray-200;
+  color: vars.$gray-700;
+}
+
+.badgeUnread {
+  background-color: vars.$primary-100;
+  color: vars.$primary-800;
+}

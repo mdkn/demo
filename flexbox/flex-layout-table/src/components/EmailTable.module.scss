@@ -1,0 +1,17 @@
+// M038-M040: EmailTable component styles
+@use '../styles/variables' as vars;
+@use '../styles/mixins' as mix;
+
+.tableContainer {
+  @include mix.scrollable;
+  flex: 1;
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}

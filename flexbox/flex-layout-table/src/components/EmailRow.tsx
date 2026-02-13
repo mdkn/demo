@@ -1,6 +1,7 @@
-// T039-T048: Email row component
+// EmailRow component with SCSS Modules
 import type { Email } from '../types/email'
 import { formatDate } from '../utils/formatDate'
+import styles from './EmailRow.module.scss'
 
 interface EmailRowProps {
   email: Email
@@ -9,57 +10,27 @@ interface EmailRowProps {
 }
 
 export default function EmailRow({ email, isSelected, onClick }: EmailRowProps) {
+  const rowClasses = `
+    ${styles.row}
+    ${isSelected ? styles.selected : ''}
+    ${!email.isRead ? styles.unread : ''}
+  `.trim()
+
   return (
-    // T040: Table row with 4 columns
-    // T046: Style read vs unread (font-weight)
-    // T047: Hover state
-    // T048: onClick handler
-    <tr
-      onClick={onClick}
-      className={`
-        cursor-pointer
-        border-b border-gray-200
-        transition-colors
-        hover:bg-gray-100
-        ${isSelected ? 'border-l-4 border-l-blue-500 bg-blue-50' : ''}
-        ${!email.isRead ? 'font-semibold' : 'font-normal'}
-      `}
-    >
-      {/* T041: Sender name/email cell */}
-      <td className="px-4 py-3">
-        <div className="max-w-xs truncate">
-          <div className={!email.isRead ? 'font-semibold' : ''}>{email.senderName}</div>
-          <div className="text-sm text-gray-500">{email.senderEmail}</div>
-        </div>
+    <tr onClick={onClick} className={rowClasses}>
+      <td className={styles.senderCell}>
+        <div className={styles.senderName}>{email.senderName}</div>
+        <div className={styles.senderEmail}>{email.senderEmail}</div>
       </td>
 
-      {/* T042: Subject cell with text truncation */}
-      <td className="px-4 py-3">
-        <div className="max-w-md truncate">{email.subject}</div>
+      <td className={styles.subjectCell}>
+        <div className={styles.subjectText}>{email.subject}</div>
       </td>
 
-      {/* T044: Date cell using formatDate utility */}
-      <td className="px-4 py-3 text-sm text-gray-600">
-        <div className="w-20">{formatDate(email.date)}</div>
-      </td>
+      <td className={styles.dateCell}>{formatDate(email.date)}</td>
 
-      {/* T045: Read/unread status indicator */}
-      <td className="px-4 py-3">
-        <span
-          className={`
-            inline-block
-            rounded-full
-            px-2
-            py-1
-            text-xs
-            font-medium
-            ${
-              email.isRead
-                ? 'bg-gray-200 text-gray-700'
-                : 'bg-blue-100 text-blue-800'
-            }
-          `}
-        >
+      <td className={styles.statusCell}>
+        <span className={email.isRead ? styles.badgeRead : styles.badgeUnread}>
           {email.isRead ? 'Read' : 'Unread'}
         </span>
       </td>
