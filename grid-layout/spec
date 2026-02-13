@@ -1,0 +1,58 @@
+#!/bin/bash
+# Spec-Kit Helper Script
+# Provides quick access to spec-kit files and information
+
+SPECKIT_DIR=".speckit"
+
+case "$1" in
+  "list"|"ls")
+    echo "=== Specifications ==="
+    ls -1 "$SPECKIT_DIR/features/" 2>/dev/null || echo "No features found"
+    echo ""
+    echo "=== Plans ==="
+    ls -1 "$SPECKIT_DIR/plans/" 2>/dev/null || echo "No plans found"
+    ;;
+
+  "spec"|"feature")
+    if [ -z "$2" ]; then
+      echo "Latest specification:"
+      ls -1t "$SPECKIT_DIR/features/" | head -1
+    else
+      cat "$SPECKIT_DIR/features/$2"
+    fi
+    ;;
+
+  "plan")
+    if [ -z "$2" ]; then
+      echo "Latest plan:"
+      ls -1t "$SPECKIT_DIR/plans/" | head -1
+    else
+      cat "$SPECKIT_DIR/plans/$2"
+    fi
+    ;;
+
+  "status")
+    echo "=== Spec-Kit Status ==="
+    echo "Project: grid-layout"
+    echo "Features: $(ls -1 "$SPECKIT_DIR/features/" 2>/dev/null | wc -l | tr -d ' ')"
+    echo "Plans: $(ls -1 "$SPECKIT_DIR/plans/" 2>/dev/null | wc -l | tr -d ' ')"
+    echo ""
+    echo "Current feature: 001-grid-memo-app"
+    echo "Status: Ready for implementation"
+    ;;
+
+  "help"|*)
+    echo "Spec-Kit Helper Script"
+    echo ""
+    echo "Usage: ./spec [command]"
+    echo ""
+    echo "Commands:"
+    echo "  list, ls        List all specifications and plans"
+    echo "  spec [file]     Show specification (latest if no file)"
+    echo "  plan [file]     Show plan (latest if no file)"
+    echo "  status          Show project status"
+    echo "  help            Show this help"
+    echo ""
+    echo "Files are located in .speckit/"
+    ;;
+esac

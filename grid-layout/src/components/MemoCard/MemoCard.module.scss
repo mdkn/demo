@@ -1,0 +1,97 @@
+.memoCard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: default;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.deleteButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+  }
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - 30px);
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  padding-right: 5px;
+
+  &:empty::before {
+    content: 'Double-click to edit';
+    color: #999;
+    font-style: italic;
+  }
+}
+
+.textarea {
+  width: 100%;
+  height: calc(100% - 30px);
+  border: none;
+  background: transparent;
+  resize: none;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  padding: 0;
+  outline: none;
+
+  &::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+}
+
+.colorButton {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+  }
+}
