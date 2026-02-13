@@ -12,12 +12,17 @@ export const COLORS = [
 export const DEFAULT_COLOR = COLORS[0].hex; // Yellow
 
 // Grid configuration for react-grid-layout
-export const GRID_CONFIG = {
+export const GRID_CONFIG: {
+  readonly cols: 12;
+  readonly rowHeight: 30;
+  readonly margin: readonly [number, number];
+  readonly containerPadding: readonly [number, number];
+} = {
   cols: 12,
   rowHeight: 30,
-  margin: [10, 10] as [number, number],
-  containerPadding: [10, 10] as [number, number],
-} as const;
+  margin: [10, 10],
+  containerPadding: [10, 10],
+};
 
 // Default size for new memos
 export const DEFAULT_MEMO_SIZE = {

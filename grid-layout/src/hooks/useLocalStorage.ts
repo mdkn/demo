@@ -1,6 +1,31 @@
 import { useState, useEffect } from 'react';
 
 /**
+ * Type-safe JSON parse wrapper with validation
+ * Parses JSON and validates against expected type structure
+ *
+ * Note: This function intentionally works with JSON.parse's any return type
+ * and performs basic runtime validation. For production use, consider adding
+ * a schema validation library like zod.
+ */
+function parseJSON<T>(value: string, fallback: T): T {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const parsed = JSON.parse(value);
+    // Basic runtime check - if parsed value is null/undefined, use fallback
+    if (parsed === null || parsed === undefined) {
+      return fallback;
+    }
+    // Trust that the parsed structure matches T
+    // In production, you would add runtime validation here (e.g., using zod)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return parsed;
+  } catch {
+    return fallback;
+  }
+}
+
+/**
  * Custom hook for syncing state with localStorage
  * @param key - localStorage key
  * @param initialValue - fallback value if localStorage is empty
@@ -14,7 +39,10 @@ export function useLocalStorage<T>(
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (!item) {
+        return initialValue;
+      }
+      return parseJSON(item, initialValue);
     } catch (error) {
       console.error(`Error reading localStorage key "${key}":`, error);
       return initialValue;

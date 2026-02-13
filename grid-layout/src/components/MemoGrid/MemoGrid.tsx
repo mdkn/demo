@@ -1,14 +1,11 @@
 import { useState, useRef } from 'react';
-import GridLayoutImport from 'react-grid-layout';
+import GridLayout from 'react-grid-layout';
 import type { Layout } from 'react-grid-layout';
 import type { Memo, LayoutItem } from '../../types';
 import { MemoCard } from '../MemoCard/MemoCard';
 import { GRID_CONFIG } from '../../constants/colors';
 import 'react-grid-layout/css/styles.css';
 import styles from './MemoGrid.module.scss';
-
-// Cast to any to work around type definition issues
-const GridLayout = GridLayoutImport as any;
 
 interface MemoGridProps {
   memos: Memo[];
@@ -65,8 +62,11 @@ export function MemoGrid({
    */
   const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // Don't create memo if clicking on a memo card or any of its children
-    const target = e.target as HTMLElement;
-    const clickedOnMemo = target.closest('.react-grid-item');
+    if (!(e.target instanceof HTMLElement)) {
+      return;
+    }
+
+    const clickedOnMemo = e.target.closest('.react-grid-item');
 
     if (!clickedOnMemo) {
       const { x, y } = calculateGridPosition(e.clientX, e.clientY);
@@ -77,8 +77,8 @@ export function MemoGrid({
   /**
    * Handle layout changes from react-grid-layout
    */
-  const handleLayoutChange = (newLayout: Layout) => {
-    // Convert readonly Layout to LayoutItem[]
+  const handleLayoutChange = (newLayout: Layout[]) => {
+    // Convert Layout[] to LayoutItem[]
     const layoutItems: LayoutItem[] = newLayout.map(item => ({
       i: item.i,
       x: item.x,

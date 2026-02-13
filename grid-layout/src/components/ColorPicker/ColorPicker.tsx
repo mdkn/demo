@@ -14,7 +14,11 @@ export function ColorPicker({ currentColor, onColorChange, onClose }: ColorPicke
   // Close on click outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+      if (
+        pickerRef.current &&
+        event.target instanceof Node &&
+        !pickerRef.current.contains(event.target)
+      ) {
         onClose();
       }
     }
