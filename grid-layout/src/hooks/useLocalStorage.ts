@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
  * and performs basic runtime validation. For production use, consider adding
  * a schema validation library like zod.
  */
-function parseJSON<T>(value: string, fallback: T): T {
+const parseJSON = <T,>(value: string, fallback: T): T => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const parsed = JSON.parse(value);
@@ -23,7 +23,7 @@ function parseJSON<T>(value: string, fallback: T): T {
   } catch {
     return fallback;
   }
-}
+};
 
 /**
  * Custom hook for syncing state with localStorage
@@ -31,10 +31,10 @@ function parseJSON<T>(value: string, fallback: T): T {
  * @param initialValue - fallback value if localStorage is empty
  * @returns tuple of [value, setValue]
  */
-export function useLocalStorage<T>(
+export const useLocalStorage = <T,>(
   key: string,
   initialValue: T
-): [T, (value: T) => void] {
+): [T, (value: T) => void] => {
   // Initialize state from localStorage or use initial value
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {

@@ -8,12 +8,12 @@ interface ColorPickerProps {
   onClose: () => void;
 }
 
-export function ColorPicker({ currentColor, onColorChange, onClose }: ColorPickerProps) {
+export const ColorPicker =  ({ currentColor, onColorChange, onClose }: ColorPickerProps) => {
   const pickerRef = useRef<HTMLDivElement>(null);
 
   // Close on click outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         pickerRef.current &&
         event.target instanceof Node &&

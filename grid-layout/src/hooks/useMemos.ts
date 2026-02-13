@@ -6,7 +6,7 @@ import { DEFAULT_COLOR, DEFAULT_MEMO_SIZE, GRID_CONFIG } from '../constants/colo
 /**
  * Custom hook for managing memos and their grid layout
  */
-export function useMemos() {
+export const useMemos = () => {
   const [state, setState] = useLocalStorage<AppState>('grid-memo-state', {
     memos: [],
     layout: [],

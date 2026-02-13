@@ -12,14 +12,14 @@ interface MemoCardProps {
   onEditModeChange: (editing: boolean) => void;
 }
 
-export function MemoCard({
+export const MemoCard = ({
   memo,
   isEditing,
   onUpdate,
   onDelete,
   onColorChange,
   onEditModeChange,
-}: MemoCardProps) {
+}: MemoCardProps) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [localContent, setLocalContent] = useState(memo.content);
   const textareaRef = useRef<HTMLTextAreaElement>(null);

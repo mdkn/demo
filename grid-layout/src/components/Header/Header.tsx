@@ -4,7 +4,7 @@ interface HeaderProps {
   onReset: () => void;
 }
 
-export function Header({ onReset }: HeaderProps) {
+export const Header = ({ onReset }: HeaderProps) => {
   const handleReset = () => {
     if (window.confirm('Clear all memos? This action cannot be undone.')) {
       onReset();

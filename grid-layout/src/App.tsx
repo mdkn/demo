@@ -3,7 +3,7 @@ import { Header } from './components/Header/Header';
 import { MemoGrid } from './components/MemoGrid/MemoGrid';
 import styles from './App.module.scss';
 
-function App() {
+const App = () => {
   const {
     memos,
     layout,

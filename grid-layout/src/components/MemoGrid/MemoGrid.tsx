@@ -17,7 +17,7 @@ interface MemoGridProps {
   onUpdateMemoColor: (id: string, color: string) => void;
 }
 
-export function MemoGrid({
+export const MemoGrid = ({
   memos,
   layout,
   onLayoutChange,
@@ -25,7 +25,7 @@ export function MemoGrid({
   onUpdateMemo,
   onDeleteMemo,
   onUpdateMemoColor,
-}: MemoGridProps) {
+}: MemoGridProps) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const [editingMemoId, setEditingMemoId] = useState<string | null>(null);
 
