@@ -54,14 +54,14 @@ declare module 'react-grid-layout' {
 
 `src/components/SimpleGrid.tsx` を作成：
 
-```typescript
+```jsx
 import { useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import type { Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import './SimpleGrid.css';
 
-export function SimpleGrid() {
+export const SimpleGrid = () => {
   // 初期レイアウト
   const [layout, setLayout] = useState<Layout[]>([
     { i: 'a', x: 0, y: 0, w: 2, h: 2 },
@@ -117,7 +117,7 @@ export function SimpleGrid() {
 
 ### 3-1. 追加機能を実装
 
-```typescript
+```jsx
 import { useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import type { Layout } from 'react-grid-layout';
@@ -127,7 +127,7 @@ interface Item {
   content: string;
 }
 
-export function DynamicGrid() {
+export const DynamicGrid = () => {
   const [items, setItems] = useState<Item[]>([
     { id: 'a', content: 'アイテムA' },
     { id: 'b', content: 'アイテムB' },
@@ -191,10 +191,10 @@ export function DynamicGrid() {
 
 ### 4-1. useLocalStorageフックを作成
 
-```typescript
+```jsx
 import { useState, useEffect } from 'react';
 
-function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => void] {
+const useLocalStorage = <T,>(key: string, initialValue: T): [T, (value: T) => void] => {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
@@ -223,8 +223,8 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => voi
 
 ### 4-2. フックを使って永続化
 
-```typescript
-export function PersistentGrid() {
+```jsx
+export const PersistentGrid = () => {
   const [items, setItems] = useLocalStorage<Item[]>('grid-items', []);
   const [layout, setLayout] = useLocalStorage<Layout[]>('grid-layout', []);
 
@@ -241,7 +241,7 @@ export function PersistentGrid() {
 
 ### 5-1. グリッド座標計算関数を追加
 
-```typescript
+```jsx
 const calculateGridPosition = (
   clientX: number,
   clientY: number,
@@ -271,8 +271,8 @@ const calculateGridPosition = (
 
 ### 5-2. ダブルクリックハンドラーを追加
 
-```typescript
-export function ClickableGrid() {
+```jsx
+export const ClickableGrid = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [layout, setLayout] = useState<Layout[]>([]);
@@ -303,14 +303,14 @@ export function ClickableGrid() {
 
 ### 6-1. アイテムコンポーネントを作成
 
-```typescript
+```jsx
 interface ItemCardProps {
   item: Item;
   onUpdate: (content: string) => void;
   onDelete: () => void;
 }
 
-function ItemCard({ item, onUpdate, onDelete }: ItemCardProps) {
+const ItemCard = ({ item, onUpdate, onDelete }: ItemCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(item.content);
 
@@ -345,8 +345,8 @@ function ItemCard({ item, onUpdate, onDelete }: ItemCardProps) {
 
 ### 6-2. 編集中はドラッグ無効化
 
-```typescript
-export function EditableGrid() {
+```jsx
+export const EditableGrid = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const getLayoutWithEditMode = () => {
