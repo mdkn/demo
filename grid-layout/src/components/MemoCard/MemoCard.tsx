@@ -38,7 +38,10 @@ export function MemoCard({
     setLocalContent(memo.content);
   }, [memo.content]);
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    // Stop propagation to prevent creating new memo in parent grid
+    e.stopPropagation();
+
     if (!isEditing) {
       onEditModeChange(true);
     }

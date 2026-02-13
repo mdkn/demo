@@ -64,8 +64,11 @@ export function MemoGrid({
    * Handle double-click to create new memo
    */
   const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Only create memo if clicking on the grid itself, not on a memo card
-    if (e.target === e.currentTarget || (e.target as HTMLElement).closest(`.${styles.gridContainer}`) === e.currentTarget) {
+    // Don't create memo if clicking on a memo card or any of its children
+    const target = e.target as HTMLElement;
+    const clickedOnMemo = target.closest('.react-grid-item');
+
+    if (!clickedOnMemo) {
       const { x, y } = calculateGridPosition(e.clientX, e.clientY);
       onAddMemo(x, y);
     }
