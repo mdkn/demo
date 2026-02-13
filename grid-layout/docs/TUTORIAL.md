@@ -48,6 +48,39 @@ declare module 'react-grid-layout' {
 
 ---
 
+## コーディング規約について
+
+このチュートリアルでは、モダンなReactの慣習に従って**Arrow Function（アロー関数）**を使用します。
+
+### Arrow Functionの特徴
+
+```jsx
+// ✅ このチュートリアルで使用するスタイル
+export const MyComponent = () => {
+  // ...
+}
+
+// ❌ 従来の関数宣言（このチュートリアルでは使用しない）
+export function MyComponent() {
+  // ...
+}
+```
+
+**Arrow Functionの利点**:
+- `this`が自動的に親スコープにバインドされる（クラスコンポーネントで重要）
+- より簡潔な構文
+- モダンなReactの標準的なスタイル
+
+**TypeScriptのジェネリック型を使う場合**:
+```jsx
+// ジェネリック型パラメータの後にカンマが必要（JSXとの区別のため）
+const useLocalStorage = <T,>(key: string, initialValue: T) => {
+  // ...
+}
+```
+
+---
+
 ## ステップ2: 基本的なグリッドを作成
 
 ### 2-1. シンプルなグリッドコンポーネント
@@ -61,8 +94,10 @@ import type { Layout } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import './SimpleGrid.css';
 
+// Arrow Functionでコンポーネントを定義
 export const SimpleGrid = () => {
-  // 初期レイアウト
+  // 初期レイアウト定義
+  // i: アイテムID（key）, x/y: 座標, w/h: 幅/高さ（グリッド単位）
   const [layout, setLayout] = useState<Layout[]>([
     { i: 'a', x: 0, y: 0, w: 2, h: 2 },
     { i: 'b', x: 2, y: 0, w: 2, h: 2 },
@@ -138,7 +173,8 @@ export const DynamicGrid = () => {
     { i: 'b', x: 2, y: 0, w: 2, h: 2 },
   ]);
 
-  // アイテムを追加
+  // イベントハンドラーもArrow Functionで定義
+  // Arrow Functionは親のthisを継承するため、bindが不要
   const addItem = () => {
     const newId = `item-${Date.now()}`;
 
@@ -194,6 +230,8 @@ export const DynamicGrid = () => {
 ```jsx
 import { useState, useEffect } from 'react';
 
+// ジェネリック型を持つArrow Function
+// <T,> のカンマは必須（JSXタグと区別するため）
 const useLocalStorage = <T,>(key: string, initialValue: T): [T, (value: T) => void] => {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
@@ -314,6 +352,8 @@ const ItemCard = ({ item, onUpdate, onDelete }: ItemCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(item.content);
 
+  // イベントハンドラーをArrow Functionで定義
+  // コンポーネント内のstateに自然にアクセスできる
   const handleDoubleClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // 親のダブルクリックを防ぐ
     setIsEditing(true);
