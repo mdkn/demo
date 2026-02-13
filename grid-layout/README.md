@@ -30,6 +30,24 @@ A sticky notes demo application built with React + TypeScript showcasing react-g
 - **Build Tool**: Vite
 - **Persistence**: localStorage
 
+## Documentation
+
+### For Developers
+
+- **[React Grid Layout 使い方ガイド](./docs/GRID_LAYOUT_GUIDE.md)** - react-grid-layoutの詳細な実装ガイド
+  - 基本的なセットアップ
+  - グリッド設定の解説
+  - レイアウトデータ構造
+  - イベント処理
+  - 応用テクニック（座標変換、境界チェック、空きスペース検索）
+  - トラブルシューティング
+
+- **[クイックリファレンス](./docs/QUICK_REFERENCE.md)** - よく使うコードスニペット集
+  - すぐに使えるサンプルコード
+  - TypeScript型定義
+  - パフォーマンス最適化Tips
+  - デバッグ方法
+
 ## Project Structure
 
 ```
