@@ -9,3 +9,6 @@ export const DAYS_IN_WEEK = 7;
 
 // デフォルトのスクロール位置（8:00 = 480px）
 export const DEFAULT_SCROLL_TOP = HOUR_HEIGHT * 8;
+
+// localStorage のキー
+export const STORAGE_KEY = 'calendar-events';

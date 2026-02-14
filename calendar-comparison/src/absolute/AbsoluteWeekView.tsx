@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { DayInfo } from '@shared/types';
+import type { DayInfo, CalendarEvent } from '@shared/types';
 import { DEFAULT_SCROLL_TOP } from '@shared/constants';
 import { TimeLabels } from '@shared/components/TimeLabels';
 import { DayColumn } from './components/DayColumn';
@@ -7,9 +7,10 @@ import styles from './AbsoluteWeekView.module.css';
 
 type AbsoluteWeekViewProps = {
   days: DayInfo[];
+  events: CalendarEvent[];
 };
 
-export const AbsoluteWeekView = ({ days }: AbsoluteWeekViewProps) => {
+export const AbsoluteWeekView = ({ days, events }: AbsoluteWeekViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export const AbsoluteWeekView = ({ days }: AbsoluteWeekViewProps) => {
       <TimeLabels />
       <div ref={containerRef} className={styles.dayColumnsContainer}>
         {days.map((day) => (
-          <DayColumn key={day.columnIndex} day={day} />
+          <DayColumn key={day.columnIndex} day={day} events={events} />
         ))}
       </div>
     </div>

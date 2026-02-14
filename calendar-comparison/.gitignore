@@ -29,6 +29,7 @@ coverage/
 .idea/
 *.swp
 *.swo
+*.png
 *~
 
 # OS

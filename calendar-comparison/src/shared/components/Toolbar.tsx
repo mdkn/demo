@@ -4,23 +4,32 @@ import styles from './Toolbar.module.css';
 type ToolbarProps = {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  onReset?: () => void;
 };
 
-export const Toolbar = ({ viewMode, onViewModeChange }: ToolbarProps) => {
+export const Toolbar = ({ viewMode, onViewModeChange, onReset }: ToolbarProps) => {
   return (
     <div className={styles.toolbar}>
-      <button
-        className={viewMode === 'absolute' ? styles.active : ''}
-        onClick={() => onViewModeChange('absolute')}
-      >
-        Absolute Only
-      </button>
-      <button
-        className={viewMode === 'grid' ? styles.active : ''}
-        onClick={() => onViewModeChange('grid')}
-      >
-        Grid Only
-      </button>
+      <div className={styles.buttonGroup}>
+        <button
+          className={viewMode === 'absolute' ? styles.active : ''}
+          onClick={() => onViewModeChange('absolute')}
+        >
+          Absolute Only
+        </button>
+        <button
+          className={viewMode === 'grid' ? styles.active : ''}
+          onClick={() => onViewModeChange('grid')}
+        >
+          Grid Only
+        </button>
+      </div>
+
+      {onReset && (
+        <button className={styles.resetButton} onClick={onReset}>
+          Reset Sample Data
+        </button>
+      )}
     </div>
   );
 };

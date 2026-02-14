@@ -1,6 +1,14 @@
 .dayGrid {
-  grid-row: 1 / span 24;
+  /* 親グリッドの行全体を占有 */
+  grid-row: 1 / span 1440;
+
+  /* サブグリッドとして動作（イベント配置用） */
+  display: grid;
+  grid-template-rows: repeat(1440, 1px);
+  /* grid-template-columns は JS で動的設定 */
+
   border-right: 1px solid #ddd;
+  position: relative;
 }
 
 .dayGrid.today {

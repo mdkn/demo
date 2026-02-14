@@ -26,3 +26,12 @@ export const generateTimeSlots = (): TimeSlot[] => {
     topPosition: hour * HOUR_HEIGHT,
   }));
 };
+
+/**
+ * Date を当日 0:00 からの経過分に変換
+ * @param date 変換する日時
+ * @returns 0:00 からの経過分 (0-1439)
+ */
+export const dateToMinutes = (date: Date): number => {
+  return date.getHours() * 60 + date.getMinutes();
+};
