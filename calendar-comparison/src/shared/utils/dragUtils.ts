@@ -118,3 +118,64 @@ export const dateToMinutes = (date: Date | string): number => {
   const d = new Date(date);
   return d.getHours() * 60 + d.getMinutes();
 };
+
+/**
+ * Determine which day column the pointer is over based on clientX
+ * @param clientX - Pointer X coordinate
+ * @param dayColumnRects - Array of DOMRect for each day column (0-6)
+ * @returns Day index (0-6) or null if outside all columns
+ *
+ * @example
+ * const rects = dayColumns.map(el => el.getBoundingClientRect());
+ * pxToDayIndex(500, rects)  // returns 2 if pointer is over Wednesday
+ */
+export const pxToDayIndex = (
+  clientX: number,
+  dayColumnRects: DOMRect[]
+): number | null => {
+  for (let i = 0; i < dayColumnRects.length; i++) {
+    const rect = dayColumnRects[i];
+    // Use < for right boundary to avoid overlap with next column
+    if (clientX >= rect.left && clientX < rect.right) {
+      return i;
+    }
+  }
+  // Check if exactly on the last column's right edge
+  if (dayColumnRects.length > 0) {
+    const lastRect = dayColumnRects[dayColumnRects.length - 1];
+    if (clientX === lastRect.right) {
+      return dayColumnRects.length - 1;
+    }
+  }
+  return null;
+};
+
+/**
+ * Calculate new date by shifting days from original date
+ * Preserves the time portion, only updates the date
+ *
+ * @param originalDate - Original date as Date object or ISO string
+ * @param newDayIndex - Target day index (0-6, where 0 is the week start)
+ * @param startDayIndex - Original day index (0-6)
+ * @returns ISO 8601 string with updated date
+ *
+ * @example
+ * calculateNewDate('2024-02-12T10:30:00', 2, 0)
+ * // Monday (0) to Wednesday (2) = +2 days
+ * // returns '2024-02-14T10:30:00.000Z'
+ */
+export const calculateNewDate = (
+  originalDate: Date | string,
+  newDayIndex: number,
+  startDayIndex: number
+): string => {
+  const date = new Date(originalDate);
+
+  // Calculate day difference
+  const dayDiff = newDayIndex - startDayIndex;
+
+  // Add days to original date
+  date.setDate(date.getDate() + dayDiff);
+
+  return date.toISOString();
+};

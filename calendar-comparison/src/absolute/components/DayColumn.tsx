@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import type { DayInfo, CalendarEvent } from '@shared/types';
 import { HOUR_HEIGHT } from '@shared/constants';
 import { filterEventsByDay } from '@shared/utils/eventUtils';
@@ -13,9 +14,13 @@ type DayColumnProps = {
   events: CalendarEvent[];
   onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
+  dayColumnRefs: React.RefObject<HTMLDivElement | null>[];  // F5: 7つの日付列のDOM参照
+  onDayHover?: (dayIndex: number | null) => void;           // F5: 列ハイライト用
+  isDropTarget: boolean;                                     // F5: この列がドロップターゲットか
 };
 
-export const DayColumn = ({ day, events, onUpdateEvent, containerRef }: DayColumnProps) => {
+export const DayColumn = forwardRef<HTMLDivElement, DayColumnProps>(
+  ({ day, events, onUpdateEvent, containerRef, dayColumnRefs, onDayHover, isDropTarget }, ref) => {
   // その日のイベントをフィルタリング
   const dayEvents = filterEventsByDay(events, day.date);
 
@@ -25,21 +30,31 @@ export const DayColumn = ({ day, events, onUpdateEvent, containerRef }: DayColum
   // 現在時刻を取得
   const { minutesFromMidnight } = useCurrentTime();
 
-  return (
-    <div className={`${styles.dayColumn} ${day.isToday ? styles.today : ''}`}>
-      <GridLines />
-      {layouts.map((layout) => (
-        <EventBlock
-          key={layout.event.id}
-          layout={layout}
-          onUpdate={onUpdateEvent}
-          hourHeight={HOUR_HEIGHT}
-          containerRef={containerRef}
-        />
-      ))}
-      {day.isToday && (
-        <NowIndicator minutesFromMidnight={minutesFromMidnight} hourHeight={HOUR_HEIGHT} />
-      )}
-    </div>
-  );
-};
+    return (
+      <div
+        ref={ref}
+        className={`${styles.dayColumn} ${day.isToday ? styles.today : ''} ${
+          isDropTarget ? styles.dropTarget : ''
+        }`}
+      >
+        <GridLines />
+        {layouts.map((layout) => (
+          <EventBlock
+            key={layout.event.id}
+            layout={layout}
+            onUpdate={onUpdateEvent}
+            hourHeight={HOUR_HEIGHT}
+            containerRef={containerRef}
+            dayColumnRefs={dayColumnRefs}
+            onDayHover={onDayHover}
+          />
+        ))}
+        {day.isToday && (
+          <NowIndicator minutesFromMidnight={minutesFromMidnight} hourHeight={HOUR_HEIGHT} />
+        )}
+      </div>
+    );
+  }
+);
+
+DayColumn.displayName = 'DayColumn';

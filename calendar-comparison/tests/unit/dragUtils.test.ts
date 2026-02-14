@@ -6,6 +6,8 @@ import {
   pxToMinutes,
   minutesToPx,
   dateToMinutes,
+  pxToDayIndex,
+  calculateNewDate,
 } from '@shared/utils/dragUtils';
 
 describe('dragUtils', () => {
@@ -212,6 +214,130 @@ describe('dragUtils', () => {
       expect(dateToMinutes('2024-01-01T09:30:00')).toBe(570);
       expect(dateToMinutes('2024-12-31T09:30:00')).toBe(570);
       // Different dates, same time → same minutes
+    });
+  });
+
+  describe('pxToDayIndex', () => {
+    // Mock DOMRects for 7 day columns (100px each, starting at x=0)
+    const mockDayRects: DOMRect[] = Array.from({ length: 7 }, (_, i) => ({
+      left: i * 100,
+      right: (i + 1) * 100,
+      top: 0,
+      bottom: 1000,
+      width: 100,
+      height: 1000,
+      x: i * 100,
+      y: 0,
+      toJSON: () => ({}),
+    }));
+
+    it('should return 0 for Monday (first column)', () => {
+      expect(pxToDayIndex(50, mockDayRects)).toBe(0);
+    });
+
+    it('should return 1 for Tuesday (second column)', () => {
+      expect(pxToDayIndex(150, mockDayRects)).toBe(1);
+    });
+
+    it('should return 6 for Sunday (last column)', () => {
+      expect(pxToDayIndex(650, mockDayRects)).toBe(6);
+    });
+
+    it('should return null if clientX is before first column', () => {
+      expect(pxToDayIndex(-50, mockDayRects)).toBeNull();
+    });
+
+    it('should return null if clientX is after last column', () => {
+      expect(pxToDayIndex(750, mockDayRects)).toBeNull();
+    });
+
+    it('should handle exact left boundary', () => {
+      expect(pxToDayIndex(0, mockDayRects)).toBe(0);
+      expect(pxToDayIndex(100, mockDayRects)).toBe(1);
+    });
+
+    it('should handle exact right boundary', () => {
+      expect(pxToDayIndex(100, mockDayRects)).toBe(1);
+      expect(pxToDayIndex(700, mockDayRects)).toBe(6);
+    });
+
+    it('should return null for empty array', () => {
+      expect(pxToDayIndex(50, [])).toBeNull();
+    });
+  });
+
+  describe('calculateNewDate', () => {
+    it('should move from Monday to Wednesday (+2 days)', () => {
+      const result = calculateNewDate('2024-02-12T10:30:00', 2, 0);
+      const date = new Date(result);
+      expect(date.getDate()).toBe(14); // Feb 12 + 2 days = Feb 14
+      expect(date.getHours()).toBe(10);
+      expect(date.getMinutes()).toBe(30);
+    });
+
+    it('should move from Friday to Monday (-4 days)', () => {
+      const result = calculateNewDate('2024-02-16T14:00:00', 0, 4);
+      const date = new Date(result);
+      expect(date.getDate()).toBe(12); // Feb 16 - 4 days = Feb 12
+      expect(date.getHours()).toBe(14);
+      expect(date.getMinutes()).toBe(0);
+    });
+
+    it('should not change date if dayIndex is same', () => {
+      const original = '2024-02-14T09:00:00';
+      const result = calculateNewDate(original, 2, 2);
+      const originalDate = new Date(original);
+      const resultDate = new Date(result);
+      expect(resultDate.getDate()).toBe(originalDate.getDate());
+      expect(resultDate.getHours()).toBe(9);
+      expect(resultDate.getMinutes()).toBe(0);
+    });
+
+    it('should preserve time across date change', () => {
+      const result = calculateNewDate('2024-02-12T23:45:00', 5, 0);
+      const date = new Date(result);
+      expect(date.getHours()).toBe(23);
+      expect(date.getMinutes()).toBe(45);
+      expect(date.getSeconds()).toBe(0);
+    });
+
+    it('should handle month boundary (forward)', () => {
+      // Feb 28 (Wed, index 2) + 5 days = Mar 4 (Mon, index 0 of next week)
+      const result = calculateNewDate('2024-02-28T10:00:00', 0, 2);
+      const date = new Date(result);
+      // Feb 28 is Wed (2), moving to Sun (6) = +4 days = Mar 3
+      // Actually: newDayIndex 0 - startDayIndex 2 = -2 days = Feb 26
+      expect(date.getDate()).toBe(26);
+      expect(date.getMonth()).toBe(1); // February (0-indexed)
+    });
+
+    it('should handle month boundary (backward)', () => {
+      const result = calculateNewDate('2024-03-01T10:00:00', 0, 6);
+      const date = new Date(result);
+      // Mar 1 is Fri, assuming Sunday (6) to Monday (0) = -6 days = Feb 24
+      expect(date.getDate()).toBe(24);
+      expect(date.getMonth()).toBe(1); // February
+    });
+
+    it('should accept Date object', () => {
+      const original = new Date('2024-02-12T10:30:00');
+      const result = calculateNewDate(original, 3, 0);
+      const date = new Date(result);
+      expect(date.getDate()).toBe(15); // Feb 12 + 3 days
+      expect(date.getHours()).toBe(10);
+      expect(date.getMinutes()).toBe(30);
+    });
+
+    it('should handle +6 days (Mon to Sun)', () => {
+      const result = calculateNewDate('2024-02-12T10:00:00', 6, 0);
+      const date = new Date(result);
+      expect(date.getDate()).toBe(18); // Feb 12 + 6 days = Feb 18
+    });
+
+    it('should handle -6 days (Sun to Mon)', () => {
+      const result = calculateNewDate('2024-02-18T10:00:00', 0, 6);
+      const date = new Date(result);
+      expect(date.getDate()).toBe(12); // Feb 18 - 6 days = Feb 12
     });
   });
 });
