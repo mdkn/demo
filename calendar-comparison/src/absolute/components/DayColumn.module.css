@@ -1,0 +1,11 @@
+.dayColumn {
+  position: relative;
+  flex: 1;
+  min-width: 100px;
+  border-right: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+.dayColumn.today {
+  filter: brightness(1.05);
+}

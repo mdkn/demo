@@ -1,0 +1,8 @@
+.dayGrid {
+  grid-row: 1 / span 24;
+  border-right: 1px solid #ddd;
+}
+
+.dayGrid.today {
+  filter: brightness(1.05);
+}
