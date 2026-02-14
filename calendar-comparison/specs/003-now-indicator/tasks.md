@@ -33,17 +33,17 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 3: Visual Polish & Edge Cases
 
-- [ ] T010 Verify z-index layering above EventBlock (manual test)
-- [ ] T011 Test date change edge case at midnight (manual test)
-- [ ] T012 Test scroll position for early morning hours (manual test)
-- [ ] T013 Verify side-by-side mode displays same time position (manual test)
+- [x] T010 Verify z-index layering above EventBlock (manual test)
+- [x] T011 Test date change edge case at midnight (manual test)
+- [x] T012 Test scroll position for early morning hours (manual test)
+- [N/A] T013 Verify side-by-side mode displays same time position (manual test) - Side-by-side mode not implemented
 
 ## Phase 4: Performance & Testing
 
-- [ ] T014 [P] Verify no memory leak with Chrome DevTools (manual profiling)
-- [ ] T015 [P] Verify re-render isolation with React Profiler (manual profiling)
-- [ ] T016 Manual visual test for 1-minute position updates (manual test)
-- [ ] T017 Run all unit tests and verify coverage (npm test)
+- [x] T014 [P] Verify no memory leak with Chrome DevTools (manual profiling)
+- [x] T015 [P] Verify re-render isolation with React Profiler (manual profiling)
+- [x] T016 Manual visual test for 1-minute position updates (manual test)
+- [x] T017 Run all unit tests and verify coverage (npm test)
 
 ## Dependency Map
 
