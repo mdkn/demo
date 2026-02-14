@@ -11,9 +11,11 @@ import styles from './DayColumn.module.css';
 type DayColumnProps = {
   day: DayInfo;
   events: CalendarEvent[];
+  onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const DayColumn = ({ day, events }: DayColumnProps) => {
+export const DayColumn = ({ day, events, onUpdateEvent, containerRef }: DayColumnProps) => {
   // その日のイベントをフィルタリング
   const dayEvents = filterEventsByDay(events, day.date);
 
@@ -27,7 +29,13 @@ export const DayColumn = ({ day, events }: DayColumnProps) => {
     <div className={`${styles.dayColumn} ${day.isToday ? styles.today : ''}`}>
       <GridLines />
       {layouts.map((layout) => (
-        <EventBlock key={layout.event.id} layout={layout} />
+        <EventBlock
+          key={layout.event.id}
+          layout={layout}
+          onUpdate={onUpdateEvent}
+          hourHeight={HOUR_HEIGHT}
+          containerRef={containerRef}
+        />
       ))}
       {day.isToday && (
         <NowIndicator minutesFromMidnight={minutesFromMidnight} hourHeight={HOUR_HEIGHT} />

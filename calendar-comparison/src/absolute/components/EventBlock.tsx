@@ -1,12 +1,24 @@
-import type { AbsoluteEventLayout } from '@shared/types';
+import type { AbsoluteEventLayout, CalendarEvent } from '@shared/types';
+import { useDragEvent } from '../hooks/useDragEvent';
 import styles from './EventBlock.module.css';
 
 type EventBlockProps = {
   layout: AbsoluteEventLayout;
+  onUpdate: (id: string, updates: Partial<CalendarEvent>) => void;
+  hourHeight: number;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const EventBlock = ({ layout }: EventBlockProps) => {
+export const EventBlock = ({ layout, onUpdate, hourHeight, containerRef }: EventBlockProps) => {
   const { event, top, left, width, height, zIndex } = layout;
+
+  // Drag event hook
+  const { isDragging, eventHandlers } = useDragEvent({
+    event,
+    onUpdate,
+    hourHeight,
+    containerRef,
+  });
 
   const style: React.CSSProperties = {
     position: 'absolute',
@@ -27,7 +39,11 @@ export const EventBlock = ({ layout }: EventBlockProps) => {
   };
 
   return (
-    <div className={styles.eventBlock} style={style}>
+    <div
+      className={`${styles.eventBlock} ${isDragging ? styles.dragging : styles.grabbable}`}
+      style={style}
+      {...eventHandlers}
+    >
       <div className={styles.title}>{event.title}</div>
       {showTime && (
         <div className={styles.time}>

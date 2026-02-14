@@ -8,9 +8,10 @@ import styles from './AbsoluteWeekView.module.css';
 type AbsoluteWeekViewProps = {
   days: DayInfo[];
   events: CalendarEvent[];
+  onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
 };
 
-export const AbsoluteWeekView = ({ days, events }: AbsoluteWeekViewProps) => {
+export const AbsoluteWeekView = ({ days, events, onUpdateEvent }: AbsoluteWeekViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,7 +25,13 @@ export const AbsoluteWeekView = ({ days, events }: AbsoluteWeekViewProps) => {
       <TimeLabels />
       <div ref={containerRef} className={styles.dayColumnsContainer}>
         {days.map((day) => (
-          <DayColumn key={day.columnIndex} day={day} events={events} />
+          <DayColumn
+            key={day.columnIndex}
+            day={day}
+            events={events}
+            onUpdateEvent={onUpdateEvent}
+            containerRef={containerRef}
+          />
         ))}
       </div>
     </div>

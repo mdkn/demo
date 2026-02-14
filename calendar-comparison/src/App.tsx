@@ -11,11 +11,11 @@ import styles from './App.module.css';
 export const App = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('absolute');
   const days = getWeekDays();
-  const { events, resetEvents } = useCalendarEvents();
+  const { events, updateEvent, resetEvents } = useCalendarEvents();
 
   return (
     <div className={styles.app}>
-      <h1>Calendar Comparison: Now Indicator (F3)</h1>
+      <h1>Calendar Comparison: Drag & Drop (F4)</h1>
       <Toolbar
         viewMode={viewMode}
         onViewModeChange={setViewMode}
@@ -27,7 +27,7 @@ export const App = () => {
           <div className={styles.view}>
             <h2>Absolute 方式</h2>
             <WeekHeader days={days} />
-            <AbsoluteWeekView days={days} events={events} />
+            <AbsoluteWeekView days={days} events={events} onUpdateEvent={updateEvent} />
           </div>
         )}
 
