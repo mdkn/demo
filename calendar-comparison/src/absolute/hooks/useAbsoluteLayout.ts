@@ -33,12 +33,12 @@ export const useAbsoluteLayout = (
 
         // 縦位置: 0:00 からの経過分をピクセルに変換
         const startMinutes = dateToMinutes(startDate);
-        const top = startMinutes;
+        const top = (startMinutes / 60) * hourHeight;
 
         // 高さ: duration をピクセルに変換（最小15px）
         const endMinutes = dateToMinutes(endDate);
         const durationMinutes = endMinutes - startMinutes;
-        const height = Math.max(durationMinutes, MIN_HEIGHT);
+        const height = Math.max((durationMinutes / 60) * hourHeight, MIN_HEIGHT);
 
         // 横位置: カラム番号からパーセンテージを計算
         const left = `${(column / totalColumns) * 100}%`;
