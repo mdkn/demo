@@ -9,9 +9,11 @@ import styles from './DayGrid.module.css';
 type DayGridProps = {
   day: DayInfo;
   events: CalendarEvent[];
+  onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const DayGrid = ({ day, events }: DayGridProps) => {
+export const DayGrid = ({ day, events, onUpdateEvent, containerRef }: DayGridProps) => {
   // その日のイベントをフィルタリング
   const dayEvents = filterEventsByDay(events, day.date);
 
@@ -33,7 +35,12 @@ export const DayGrid = ({ day, events }: DayGridProps) => {
       }}
     >
       {layouts.map((layout) => (
-        <EventBlock key={layout.event.id} layout={layout} />
+        <EventBlock
+          key={layout.event.id}
+          layout={layout}
+          onUpdate={onUpdateEvent}
+          containerRef={containerRef}
+        />
       ))}
       {day.isToday && <NowIndicator minutesFromMidnight={minutesFromMidnight} />}
     </div>

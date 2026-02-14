@@ -8,9 +8,10 @@ import styles from './GridWeekView.module.css';
 type GridWeekViewProps = {
   days: DayInfo[];
   events: CalendarEvent[];
+  onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
 };
 
-export const GridWeekView = ({ days, events }: GridWeekViewProps) => {
+export const GridWeekView = ({ days, events, onUpdateEvent }: GridWeekViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,7 +25,13 @@ export const GridWeekView = ({ days, events }: GridWeekViewProps) => {
       <TimeLabels />
       <div ref={containerRef} className={styles.weekGrid}>
         {days.map((day) => (
-          <DayGrid key={day.columnIndex} day={day} events={events} />
+          <DayGrid
+            key={day.columnIndex}
+            day={day}
+            events={events}
+            onUpdateEvent={onUpdateEvent}
+            containerRef={containerRef}
+          />
         ))}
       </div>
     </div>

@@ -28,9 +28,9 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 2: Grid 方式の実装
 
-- [ ] T008 [US1][US2][US3][US4] Create useDragEvent hook for grid layout (src/grid/hooks/useDragEvent.ts)
-- [ ] T009 [US1][US3] Update EventBlock to integrate useDragEvent (src/grid/components/EventBlock.tsx)
-- [ ] T010 [US3] Add .dragging and .grabbable styles (src/grid/components/EventBlock.module.css)
+- [x] T008 [US1][US2][US3][US4] Create useDragEvent hook for grid layout (src/grid/hooks/useDragEvent.ts)
+- [x] T009 [US1][US3] Update EventBlock to integrate useDragEvent (src/grid/components/EventBlock.tsx)
+- [x] T010 [US3] Add .dragging and .grabbable styles (src/grid/components/EventBlock.module.css)
 - [ ] T011 [P] Test grid-row update performance with React Profiler (manual profiling)
 
 ## Phase 3: Edge Cases & Polish

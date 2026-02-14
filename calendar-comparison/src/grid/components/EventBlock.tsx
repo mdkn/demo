@@ -1,12 +1,22 @@
-import type { GridEventLayout } from '@shared/types';
+import type { GridEventLayout, CalendarEvent } from '@shared/types';
+import { useDragEvent } from '../hooks/useDragEvent';
 import styles from './EventBlock.module.css';
 
 type EventBlockProps = {
   layout: GridEventLayout;
+  onUpdate: (id: string, updates: Partial<CalendarEvent>) => void;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 };
 
-export const EventBlock = ({ layout }: EventBlockProps) => {
+export const EventBlock = ({ layout, onUpdate, containerRef }: EventBlockProps) => {
   const { event, gridRow, gridColumn, colSpan } = layout;
+
+  // Drag event hook
+  const { isDragging, eventHandlers } = useDragEvent({
+    event,
+    onUpdate,
+    containerRef,
+  });
 
   const style: React.CSSProperties = {
     gridRow,
@@ -24,7 +34,11 @@ export const EventBlock = ({ layout }: EventBlockProps) => {
   const showTime = duration > 30;
 
   return (
-    <div className={styles.eventBlock} style={style}>
+    <div
+      className={`${styles.eventBlock} ${isDragging ? styles.dragging : styles.grabbable}`}
+      style={style}
+      {...eventHandlers}
+    >
       <div className={styles.title}>{event.title}</div>
       {showTime && (
         <div className={styles.time}>
