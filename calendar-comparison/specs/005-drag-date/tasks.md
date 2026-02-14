@@ -28,10 +28,10 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 2: Grid 方式の拡張
 
-- [ ] T008 [US1][US2][US3] Extend useDragEvent hook for horizontal drag (src/grid/hooks/useDragEvent.ts)
-- [ ] T009 [US3] Update GridWeekView to manage hover state (src/grid/GridWeekView.tsx)
-- [ ] T010 [US3] Update DayGrid to show dropTarget style (src/grid/components/DayGrid.tsx)
-- [ ] T011 [US3] Add .dropTarget style to DayGrid (src/grid/components/DayGrid.module.css)
+- [x] T008 [US1][US2][US3] Extend useDragEvent hook for horizontal drag (src/grid/hooks/useDragEvent.ts)
+- [x] T009 [US3] Update GridWeekView to manage hover state (src/grid/GridWeekView.tsx)
+- [x] T010 [US3] Update DayGrid to show dropTarget style (src/grid/components/DayGrid.tsx)
+- [x] T011 [US3] Add .dropTarget style to DayGrid (src/grid/components/DayGrid.module.css)
 
 ## Phase 3: Integration & Edge Cases
 

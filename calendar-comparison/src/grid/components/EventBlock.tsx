@@ -6,16 +6,26 @@ type EventBlockProps = {
   layout: GridEventLayout;
   onUpdate: (id: string, updates: Partial<CalendarEvent>) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
+  dayColumnRefs: React.RefObject<HTMLDivElement | null>[];  // F5
+  onDayHover?: (dayIndex: number | null) => void;           // F5
 };
 
-export const EventBlock = ({ layout, onUpdate, containerRef }: EventBlockProps) => {
+export const EventBlock = ({
+  layout,
+  onUpdate,
+  containerRef,
+  dayColumnRefs,
+  onDayHover,
+}: EventBlockProps) => {
   const { event, gridRow, gridColumn, colSpan } = layout;
 
-  // Drag event hook
+  // Drag event hook (F4 + F5)
   const { isDragging, eventHandlers } = useDragEvent({
     event,
     onUpdate,
     containerRef,
+    dayColumnRefs,
+    onDayHover,
   });
 
   const style: React.CSSProperties = {
