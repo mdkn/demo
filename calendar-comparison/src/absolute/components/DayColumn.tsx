@@ -1,9 +1,11 @@
 import type { DayInfo, CalendarEvent } from '@shared/types';
 import { HOUR_HEIGHT } from '@shared/constants';
 import { filterEventsByDay } from '@shared/utils/eventUtils';
+import { useCurrentTime } from '@shared/hooks/useCurrentTime';
 import { useAbsoluteLayout } from '../hooks/useAbsoluteLayout';
 import { GridLines } from './GridLines';
 import { EventBlock } from './EventBlock';
+import { NowIndicator } from './NowIndicator';
 import styles from './DayColumn.module.css';
 
 type DayColumnProps = {
@@ -18,12 +20,18 @@ export const DayColumn = ({ day, events }: DayColumnProps) => {
   // レイアウト計算
   const layouts = useAbsoluteLayout(dayEvents, HOUR_HEIGHT);
 
+  // 現在時刻を取得
+  const { minutesFromMidnight } = useCurrentTime();
+
   return (
     <div className={`${styles.dayColumn} ${day.isToday ? styles.today : ''}`}>
       <GridLines />
       {layouts.map((layout) => (
         <EventBlock key={layout.event.id} layout={layout} />
       ))}
+      {day.isToday && (
+        <NowIndicator minutesFromMidnight={minutesFromMidnight} hourHeight={HOUR_HEIGHT} />
+      )}
     </div>
   );
 };

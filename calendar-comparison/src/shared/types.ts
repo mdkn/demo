@@ -39,3 +39,9 @@ export type GridEventLayout = {
   gridColumn: number;  // 1-based column index
   colSpan: number;     // span 数（通常 1）
 };
+
+// 現在時刻の情報
+export type CurrentTime = {
+  now: Date;                    // 現在時刻
+  minutesFromMidnight: number;  // 0:00からの経過分 (0-1439)
+};

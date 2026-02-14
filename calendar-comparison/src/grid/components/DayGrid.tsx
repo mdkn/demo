@@ -1,7 +1,9 @@
 import type { DayInfo, CalendarEvent } from '@shared/types';
 import { filterEventsByDay } from '@shared/utils/eventUtils';
+import { useCurrentTime } from '@shared/hooks/useCurrentTime';
 import { useGridLayout } from '../hooks/useGridLayout';
 import { EventBlock } from './EventBlock';
+import { NowIndicator } from './NowIndicator';
 import styles from './DayGrid.module.css';
 
 type DayGridProps = {
@@ -15,6 +17,9 @@ export const DayGrid = ({ day, events }: DayGridProps) => {
 
   // レイアウト計算（LCM列数も取得）
   const { layouts, totalColumns } = useGridLayout(dayEvents);
+
+  // 現在時刻を取得
+  const { minutesFromMidnight } = useCurrentTime();
 
   // グリッドテンプレートカラムを動的に生成
   const gridTemplateColumns = `repeat(${totalColumns}, 1fr)`;
@@ -30,6 +35,7 @@ export const DayGrid = ({ day, events }: DayGridProps) => {
       {layouts.map((layout) => (
         <EventBlock key={layout.event.id} layout={layout} />
       ))}
+      {day.isToday && <NowIndicator minutesFromMidnight={minutesFromMidnight} />}
     </div>
   );
 };

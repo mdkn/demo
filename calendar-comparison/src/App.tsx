@@ -15,7 +15,7 @@ export const App = () => {
 
   return (
     <div className={styles.app}>
-      <h1>Calendar Comparison: Event Placement (F2)</h1>
+      <h1>Calendar Comparison: Now Indicator (F3)</h1>
       <Toolbar
         viewMode={viewMode}
         onViewModeChange={setViewMode}
