@@ -16,6 +16,13 @@ type ResizeState = {
   originalEndAt: string;    // For Escape cancel
 };
 
+type TooltipState = {
+  visible: boolean;
+  x: number;
+  y: number;
+  content: string;
+};
+
 type UseResizeEventProps = {
   event: CalendarEvent;
   onUpdate: (id: string, updates: Partial<CalendarEvent>) => void;
@@ -33,8 +40,23 @@ export const useResizeEvent = ({
   containerRef,
 }: UseResizeEventProps) => {
   const [resizeState, setResizeState] = useState<ResizeState | null>(null);
+  const [tooltipState, setTooltipState] = useState<TooltipState>({
+    visible: false,
+    x: 0,
+    y: 0,
+    content: '',
+  });
   const elementRef = useRef<HTMLDivElement | null>(null);
   const pointerIdRef = useRef<number | null>(null);
+
+  /**
+   * Format minutes to HH:MM string
+   */
+  const formatMinutes = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}:${mins.toString().padStart(2, '0')}`;
+  };
 
   /**
    * Handle top handle pointer down - start top resize
@@ -108,6 +130,9 @@ export const useResizeEvent = ({
       const pixelsPerMinute = containerHeight / 1440;
       const deltaMinutes = deltaY / pixelsPerMinute;
 
+      let currentStartMinutes: number;
+      let currentEndMinutes: number;
+
       if (resizeState.resizeType === 'top') {
         // Top resize: change startAt only, endAt stays fixed
         let newStartMinutes = resizeState.startMinutes + deltaMinutes;
@@ -121,6 +146,9 @@ export const useResizeEvent = ({
 
         // Apply range clamping (0:00 minimum)
         newStartMinutes = Math.max(0, newStartMinutes);
+
+        currentStartMinutes = newStartMinutes;
+        currentEndMinutes = resizeState.endMinutes;
 
         // Update element style immediately (no React re-render for smooth resizing)
         // Grid uses 1-indexed row numbers (row 1 = minute 0)
@@ -143,11 +171,22 @@ export const useResizeEvent = ({
         // Apply range clamping (24:00 maximum)
         newEndMinutes = Math.min(1440, newEndMinutes);
 
+        currentStartMinutes = resizeState.startMinutes;
+        currentEndMinutes = newEndMinutes;
+
         // Update element style immediately
         if (elementRef.current) {
           elementRef.current.style.gridRowEnd = String(newEndMinutes + 1);
         }
       }
+
+      // Update tooltip
+      setTooltipState({
+        visible: true,
+        x: e.clientX,
+        y: e.clientY,
+        content: `${formatMinutes(currentStartMinutes)} - ${formatMinutes(currentEndMinutes)}`,
+      });
     };
 
     // Attach to document to track movement outside element
@@ -207,8 +246,9 @@ export const useResizeEvent = ({
         }
       }
 
-      // Clear resize state
+      // Clear resize state and tooltip
       setResizeState(null);
+      setTooltipState({ visible: false, x: 0, y: 0, content: '' });
       pointerIdRef.current = null;
     };
 
@@ -248,8 +288,9 @@ export const useResizeEvent = ({
           }
         }
 
-        // Clear resize state without updating event
+        // Clear resize state and tooltip without updating event
         setResizeState(null);
+        setTooltipState({ visible: false, x: 0, y: 0, content: '' });
         pointerIdRef.current = null;
       }
     };
@@ -280,8 +321,9 @@ export const useResizeEvent = ({
         elementRef.current.style.gridRowEnd = String(originalEndMinutes + 1);
       }
 
-      // Clear resize state
+      // Clear resize state and tooltip
       setResizeState(null);
+      setTooltipState({ visible: false, x: 0, y: 0, content: '' });
       pointerIdRef.current = null;
     };
 
@@ -295,6 +337,7 @@ export const useResizeEvent = ({
   return {
     isResizing: resizeState?.isResizing ?? false,
     resizeType: resizeState?.resizeType ?? null,
+    tooltipState,
     topHandleProps: {
       onPointerDown: handleTopPointerDown,
     },

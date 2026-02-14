@@ -43,10 +43,10 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 4: Tooltip (Optional - P2)
 
-- [ ] T017 [US5] Create Tooltip component (src/shared/components/Tooltip.tsx)
-- [ ] T018 [US5] Style Tooltip component (src/shared/components/Tooltip.module.css)
-- [ ] T019 [US5] Integrate Tooltip with Absolute useResizeEvent (src/absolute/hooks/useResizeEvent.ts)
-- [ ] T020 [US5] Integrate Tooltip with Grid useResizeEvent (src/grid/hooks/useResizeEvent.ts)
+- [x] T017 [US5] Create Tooltip component (src/shared/components/Tooltip.tsx)
+- [x] T018 [US5] Style Tooltip component (src/shared/components/Tooltip.module.css)
+- [x] T019 [US5] Integrate Tooltip with Absolute useResizeEvent (src/absolute/hooks/useResizeEvent.ts)
+- [x] T020 [US5] Integrate Tooltip with Grid useResizeEvent (src/grid/hooks/useResizeEvent.ts)
 
 ## Phase 5: Performance & Testing
 

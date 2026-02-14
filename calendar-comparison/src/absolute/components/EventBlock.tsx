@@ -2,6 +2,7 @@ import type { AbsoluteEventLayout, CalendarEvent } from '@shared/types';
 import { useDragEvent } from '../hooks/useDragEvent';
 import { useResizeEvent } from '../hooks/useResizeEvent';
 import { ResizeHandle } from './ResizeHandle';
+import { Tooltip } from '@shared/components/Tooltip';
 import styles from './EventBlock.module.css';
 
 type EventBlockProps = {
@@ -34,7 +35,7 @@ export const EventBlock = ({
   });
 
   // Resize event hook (F6)
-  const { isResizing, topHandleProps, bottomHandleProps } = useResizeEvent({
+  const { isResizing, tooltipState, topHandleProps, bottomHandleProps } = useResizeEvent({
     event,
     onUpdate,
     hourHeight,
@@ -63,23 +64,28 @@ export const EventBlock = ({
   const stateClass = isResizing ? styles.resizing : isDragging ? styles.dragging : styles.grabbable;
 
   return (
-    <div
-      className={`${styles.eventBlock} ${stateClass}`}
-      style={style}
-      {...eventHandlers}
-    >
-      {/* F6: Top resize handle */}
-      <ResizeHandle position="top" {...topHandleProps} />
+    <>
+      <div
+        className={`${styles.eventBlock} ${stateClass}`}
+        style={style}
+        {...eventHandlers}
+      >
+        {/* F6: Top resize handle */}
+        <ResizeHandle position="top" {...topHandleProps} />
 
-      <div className={styles.title}>{event.title}</div>
-      {showTime && (
-        <div className={styles.time}>
-          {formatTime(event.startAt)} - {formatTime(event.endAt)}
-        </div>
-      )}
+        <div className={styles.title}>{event.title}</div>
+        {showTime && (
+          <div className={styles.time}>
+            {formatTime(event.startAt)} - {formatTime(event.endAt)}
+          </div>
+        )}
 
-      {/* F6: Bottom resize handle */}
-      <ResizeHandle position="bottom" {...bottomHandleProps} />
-    </div>
+        {/* F6: Bottom resize handle */}
+        <ResizeHandle position="bottom" {...bottomHandleProps} />
+      </div>
+
+      {/* F6: Resize tooltip */}
+      <Tooltip {...tooltipState} />
+    </>
   );
 };
