@@ -8,10 +8,11 @@ import styles from './GridWeekView.module.css';
 type GridWeekViewProps = {
   days: DayInfo[];
   events: CalendarEvent[];
+  onAddEvent: (event: Omit<CalendarEvent, 'id'>) => void;
   onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
 };
 
-export const GridWeekView = ({ days, events, onUpdateEvent }: GridWeekViewProps) => {
+export const GridWeekView = ({ days, events, onAddEvent, onUpdateEvent }: GridWeekViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredDayIndex, setHoveredDayIndex] = useState<number | null>(null);
 
@@ -47,6 +48,7 @@ export const GridWeekView = ({ days, events, onUpdateEvent }: GridWeekViewProps)
             ref={dayColumnRefs[index]}
             day={day}
             events={events}
+            onAddEvent={onAddEvent}
             onUpdateEvent={onUpdateEvent}
             containerRef={containerRef}
             dayColumnRefs={dayColumnRefs}

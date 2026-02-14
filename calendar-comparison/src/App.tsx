@@ -35,7 +35,7 @@ export const App = () => {
           <div className={styles.view}>
             <h2>Grid 方式</h2>
             <WeekHeader days={days} />
-            <GridWeekView days={days} events={events} onUpdateEvent={updateEvent} />
+            <GridWeekView days={days} events={events} onAddEvent={addEvent} onUpdateEvent={updateEvent} />
           </div>
         )}
       </div>

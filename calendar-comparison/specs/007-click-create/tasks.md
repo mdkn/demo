@@ -29,10 +29,10 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 2: Grid 方式の実装
 
-- [ ] T009 [US1][US2] Create useCreateEvent hook for Grid (src/grid/hooks/useCreateEvent.ts)
-- [ ] T010 [US3] Create CreationPlaceholder component for Grid (src/grid/components/CreationPlaceholder.tsx)
-- [ ] T011 [US3] Style CreationPlaceholder for Grid (src/grid/components/CreationPlaceholder.module.css)
-- [ ] T012 [US1][US2][US3] Update DayGrid to use useCreateEvent (src/grid/components/DayGrid.tsx)
+- [x] T009 [US1][US2] Create useCreateEvent hook for Grid (src/grid/hooks/useCreateEvent.ts)
+- [x] T010 [US3] Create CreationPlaceholder component for Grid (src/grid/components/CreationPlaceholder.tsx)
+- [x] T011 [US3] Style CreationPlaceholder for Grid (src/grid/components/CreationPlaceholder.module.css)
+- [x] T012 [US1][US2][US3] Update DayGrid to use useCreateEvent (src/grid/components/DayGrid.tsx)
 
 ## Phase 3: Edge Cases & Integration
 
