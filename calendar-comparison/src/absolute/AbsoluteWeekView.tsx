@@ -8,10 +8,11 @@ import styles from './AbsoluteWeekView.module.css';
 type AbsoluteWeekViewProps = {
   days: DayInfo[];
   events: CalendarEvent[];
+  onAddEvent: (event: Omit<CalendarEvent, 'id'>) => void;
   onUpdateEvent: (id: string, updates: Partial<CalendarEvent>) => void;
 };
 
-export const AbsoluteWeekView = ({ days, events, onUpdateEvent }: AbsoluteWeekViewProps) => {
+export const AbsoluteWeekView = ({ days, events, onAddEvent, onUpdateEvent }: AbsoluteWeekViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [hoveredDayIndex, setHoveredDayIndex] = useState<number | null>(null);
 
@@ -47,6 +48,7 @@ export const AbsoluteWeekView = ({ days, events, onUpdateEvent }: AbsoluteWeekVi
             ref={dayColumnRefs[index]}
             day={day}
             events={events}
+            onAddEvent={onAddEvent}
             onUpdateEvent={onUpdateEvent}
             containerRef={containerRef}
             dayColumnRefs={dayColumnRefs}

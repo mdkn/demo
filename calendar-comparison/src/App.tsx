@@ -11,7 +11,7 @@ import styles from './App.module.css';
 export const App = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('absolute');
   const days = getWeekDays();
-  const { events, updateEvent, resetEvents } = useCalendarEvents();
+  const { events, addEvent, updateEvent, resetEvents } = useCalendarEvents();
 
   return (
     <div className={styles.app}>
@@ -27,7 +27,7 @@ export const App = () => {
           <div className={styles.view}>
             <h2>Absolute 方式</h2>
             <WeekHeader days={days} />
-            <AbsoluteWeekView days={days} events={events} onUpdateEvent={updateEvent} />
+            <AbsoluteWeekView days={days} events={events} onAddEvent={addEvent} onUpdateEvent={updateEvent} />
           </div>
         )}
 

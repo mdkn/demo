@@ -25,7 +25,7 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 - [x] T005 [US1][US2] Create useCreateEvent hook (src/absolute/hooks/useCreateEvent.ts)
 - [x] T006 [US3] Create CreationPlaceholder component (src/absolute/components/CreationPlaceholder.tsx)
 - [x] T007 [US3] Style CreationPlaceholder (src/absolute/components/CreationPlaceholder.module.css)
-- [ ] T008 [US1][US2][US3] Update DayColumn to use useCreateEvent (src/absolute/components/DayColumn.tsx)
+- [x] T008 [US1][US2][US3] Update DayColumn to use useCreateEvent (src/absolute/components/DayColumn.tsx)
 
 ## Phase 2: Grid 方式の実装
 
