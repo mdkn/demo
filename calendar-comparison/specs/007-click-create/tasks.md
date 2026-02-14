@@ -36,10 +36,10 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 3: Edge Cases & Integration
 
-- [ ] T013 Implement existing event collision detection (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
-- [ ] T014 [US2] Implement minimum duration (15min) clamping (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
-- [ ] T015 [US3] Implement default title "新しいイベント" (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
-- [ ] T016 [US4][US5] Implement outside click cancel (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
+- [x] T013 Implement existing event collision detection (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
+- [x] T014 [US2] Implement minimum duration (15min) clamping (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
+- [x] T015 [US3] Implement default title "新しいイベント" (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
+- [x] T016 [US4][US5] Implement outside click cancel (src/absolute/hooks/useCreateEvent.ts, src/grid/hooks/useCreateEvent.ts)
 - [ ] T017 Verify side-by-side mode consistency (manual test)
 
 ## Phase 4: Performance & Polish

@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { CalendarEvent, DayInfo } from '@shared/types';
 import {
   pxToMinutes,
   snapToMinutes,
   calculateDateTime,
 } from '@shared/utils/dragUtils';
+
+const MINIMUM_DURATION_MINUTES = 15;
 
 type CreationState = {
   isCreating: boolean;
@@ -50,8 +52,13 @@ export const useCreateEvent = ({
     let startMinutes = pxToMinutes(offsetY, hourHeight);
     startMinutes = snapToMinutes(startMinutes, 15);
 
-    // Default 1-hour duration
-    const endMinutes = Math.min(startMinutes + 60, 1440);
+    // Default 1-hour duration, with minimum 15-minute enforcement
+    let endMinutes = Math.min(startMinutes + 60, 1440);
+
+    // T014: Enforce minimum duration
+    if (endMinutes - startMinutes < MINIMUM_DURATION_MINUTES) {
+      endMinutes = Math.min(startMinutes + MINIMUM_DURATION_MINUTES, 1440);
+    }
 
     setCreationState({
       isCreating: true,
@@ -86,6 +93,33 @@ export const useCreateEvent = ({
   const handleCancel = () => {
     setCreationState(null);
   };
+
+  /**
+   * T016: Handle outside click to cancel creation
+   */
+  useEffect(() => {
+    if (!creationState) return;
+
+    const handleOutsideClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      // Ignore clicks inside the placeholder or its input
+      if (target.closest('[class*="creationPlaceholder"]')) return;
+
+      // Cancel creation on outside click
+      handleCancel();
+    };
+
+    // Add listener after a small delay to avoid immediate cancellation
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', handleOutsideClick);
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [creationState]);
 
   return {
     creationState,
