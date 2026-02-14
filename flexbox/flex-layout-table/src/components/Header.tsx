@@ -6,7 +6,7 @@ interface HeaderProps {
   stats: EmailStats
 }
 
-export default function Header({ stats }: HeaderProps) {
+const Header = ({ stats }: HeaderProps) => {
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -30,3 +30,5 @@ export default function Header({ stats }: HeaderProps) {
     </header>
   )
 }
+
+export default Header

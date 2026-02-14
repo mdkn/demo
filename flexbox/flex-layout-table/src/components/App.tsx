@@ -9,7 +9,7 @@ import styles from './App.module.scss'
 // Import emails data
 import emailsData from '../data/emails.json'
 
-export default function App() {
+export const App = () => {
   // T028: Load emails data
   const emails = emailsData as Email[]
 
