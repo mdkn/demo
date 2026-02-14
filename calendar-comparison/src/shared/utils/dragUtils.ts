@@ -179,3 +179,33 @@ export const calculateNewDate = (
 
   return date.toISOString();
 };
+
+/**
+ * Calculate ISO 8601 datetime by combining a date with minutes from midnight
+ * Used for creating new events from click/drag coordinates
+ *
+ * @param date - Base date (Date object or ISO string)
+ * @param minutes - Time in minutes from midnight (0-1439)
+ * @returns ISO 8601 string combining the date and time
+ *
+ * @example
+ * calculateDateTime('2024-02-14', 540)
+ * // returns '2024-02-14T09:00:00.000Z' (540 minutes = 9:00)
+ *
+ * calculateDateTime('2024-02-14T10:30:00', 900)
+ * // returns '2024-02-14T15:00:00.000Z' (900 minutes = 15:00, time replaced)
+ */
+export const calculateDateTime = (
+  date: Date | string,
+  minutes: number
+): string => {
+  const d = new Date(date);
+
+  // Set time to specified minutes from midnight
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  d.setHours(hours, mins, 0, 0);
+
+  return d.toISOString();
+};
