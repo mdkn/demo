@@ -1,5 +1,7 @@
 import type { GridEventLayout, CalendarEvent } from '@shared/types';
 import { useDragEvent } from '../hooks/useDragEvent';
+import { useResizeEvent } from '../hooks/useResizeEvent';
+import { ResizeHandle } from './ResizeHandle';
 import styles from './EventBlock.module.css';
 
 type EventBlockProps = {
@@ -28,6 +30,13 @@ export const EventBlock = ({
     onDayHover,
   });
 
+  // Resize event hook (F6)
+  const { isResizing, topHandleProps, bottomHandleProps } = useResizeEvent({
+    event,
+    onUpdate,
+    containerRef,
+  });
+
   const style: React.CSSProperties = {
     gridRow,
     gridColumn: `${gridColumn} / span ${colSpan}`,
@@ -43,18 +52,27 @@ export const EventBlock = ({
   const duration = parseInt(gridRow.split('span ')[1]);
   const showTime = duration > 30;
 
+  // Determine CSS class based on state
+  const stateClass = isResizing ? styles.resizing : isDragging ? styles.dragging : styles.grabbable;
+
   return (
     <div
-      className={`${styles.eventBlock} ${isDragging ? styles.dragging : styles.grabbable}`}
+      className={`${styles.eventBlock} ${stateClass}`}
       style={style}
       {...eventHandlers}
     >
+      {/* F6: Top resize handle */}
+      <ResizeHandle position="top" {...topHandleProps} />
+
       <div className={styles.title}>{event.title}</div>
       {showTime && (
         <div className={styles.time}>
           {formatTime(event.startAt)} - {formatTime(event.endAt)}
         </div>
       )}
+
+      {/* F6: Bottom resize handle */}
+      <ResizeHandle position="bottom" {...bottomHandleProps} />
     </div>
   );
 };
