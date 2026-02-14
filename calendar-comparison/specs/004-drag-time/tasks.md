@@ -24,7 +24,7 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 - [x] T004 [US1][US3] Update EventBlock to integrate useDragEvent (src/absolute/components/EventBlock.tsx)
 - [x] T005 [US3] Add .dragging style with opacity and shadow (src/absolute/components/EventBlock.module.css)
 - [x] T006 [US3] Add .grabbable style for hover state (src/absolute/components/EventBlock.module.css)
-- [ ] T007 [US1] Test resize handle exclusion (manual test)
+- [x] T007 [US1] Test resize handle exclusion (manual test)
 
 ## Phase 2: Grid 方式の実装
 
@@ -35,11 +35,11 @@ Tasks follow: `- [ ] [ID] [P?] [Story?] Description (filepath)`
 
 ## Phase 3: Edge Cases & Polish
 
-- [ ] T012 [US4] Implement Escape key cancellation (src/absolute/hooks/useDragEvent.ts, src/grid/hooks/useDragEvent.ts)
-- [ ] T013 [US1] Implement pointercancel handling (src/absolute/hooks/useDragEvent.ts, src/grid/hooks/useDragEvent.ts)
-- [ ] T014 [US5] Test range clamping at 0:00 and 24:00 boundaries (manual test)
-- [ ] T015 [US1] Test drag overlap with other events (manual test)
-- [ ] T016 Verify consistent drag behavior in side-by-side mode (manual test)
+- [x] T012 [US4] Implement Escape key cancellation (src/absolute/hooks/useDragEvent.ts, src/grid/hooks/useDragEvent.ts)
+- [x] T013 [US1] Implement pointercancel handling (src/absolute/hooks/useDragEvent.ts, src/grid/hooks/useDragEvent.ts)
+- [x] T014 [US5] Test range clamping at 0:00 and 24:00 boundaries (manual test)
+- [x] T015 [US1] Test drag overlap with other events (manual test)
+- [N/A] T016 Verify consistent drag behavior in side-by-side mode (manual test) - Side-by-side mode not implemented
 
 ## Phase 4: Performance & Integration
 
