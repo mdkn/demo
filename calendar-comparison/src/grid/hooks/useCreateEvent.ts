@@ -10,6 +10,7 @@ const MINIMUM_DURATION_MINUTES = 15;
 
 type CreationState = {
   isCreating: boolean;
+  isDragging: boolean;
   startMinutes: number;
   endMinutes: number;
   title: string;
@@ -36,9 +37,9 @@ export const useCreateEvent = ({
   const [creationState, setCreationState] = useState<CreationState | null>(null);
 
   /**
-   * Handle click on empty area - creates 1-hour event
+   * Handle pointer down - start drag selection or click creation
    */
-  const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     // Ignore clicks on existing events
     const target = e.target as HTMLElement;
     if (target.closest('[class*="eventBlock"]')) return;
@@ -52,7 +53,7 @@ export const useCreateEvent = ({
     let startMinutes = pxToMinutes(offsetY, hourHeight);
     startMinutes = snapToMinutes(startMinutes, 15);
 
-    // Default 1-hour duration, with minimum 15-minute enforcement
+    // Start with default 1-hour duration
     let endMinutes = Math.min(startMinutes + 60, 1440);
 
     // T014: Enforce minimum duration
@@ -62,9 +63,61 @@ export const useCreateEvent = ({
 
     setCreationState({
       isCreating: true,
+      isDragging: true,
       startMinutes,
       endMinutes,
       title: '',
+    });
+
+    // Capture pointer for drag
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  /**
+   * Handle pointer move - update end time during drag
+   */
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!creationState || !creationState.isDragging) return;
+    if (!containerRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const offsetY = e.clientY - rect.top;
+    let currentMinutes = pxToMinutes(offsetY, hourHeight);
+    currentMinutes = snapToMinutes(currentMinutes, 15);
+
+    // Calculate new start and end based on drag direction
+    let newStartMinutes = Math.min(creationState.startMinutes, currentMinutes);
+    let newEndMinutes = Math.max(creationState.startMinutes, currentMinutes);
+
+    // T014: Enforce minimum duration
+    if (newEndMinutes - newStartMinutes < MINIMUM_DURATION_MINUTES) {
+      if (currentMinutes > creationState.startMinutes) {
+        newEndMinutes = newStartMinutes + MINIMUM_DURATION_MINUTES;
+      } else {
+        newStartMinutes = newEndMinutes - MINIMUM_DURATION_MINUTES;
+      }
+    }
+
+    // Clamp to day boundaries
+    newStartMinutes = Math.max(0, newStartMinutes);
+    newEndMinutes = Math.min(1440, newEndMinutes);
+
+    setCreationState({
+      ...creationState,
+      startMinutes: newStartMinutes,
+      endMinutes: newEndMinutes,
+    });
+  };
+
+  /**
+   * Handle pointer up - finalize drag selection
+   */
+  const handlePointerUp = () => {
+    if (!creationState) return;
+
+    setCreationState({
+      ...creationState,
+      isDragging: false,
     });
   };
 
@@ -124,7 +177,9 @@ export const useCreateEvent = ({
   return {
     creationState,
     backgroundHandlers: {
-      onClick: handleBackgroundClick,
+      onPointerDown: handlePointerDown,
+      onPointerMove: handlePointerMove,
+      onPointerUp: handlePointerUp,
     },
     onConfirm: handleConfirm,
     onCancel: handleCancel,
