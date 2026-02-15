@@ -15,13 +15,13 @@ export const Toolbar = ({ viewMode, onViewModeChange, onReset }: ToolbarProps) =
           className={viewMode === 'absolute' ? styles.active : ''}
           onClick={() => onViewModeChange('absolute')}
         >
-          Absolute Only
+          Absolute
         </button>
         <button
           className={viewMode === 'grid' ? styles.active : ''}
           onClick={() => onViewModeChange('grid')}
         >
-          Grid Only
+          Grid
         </button>
       </div>
 
