@@ -1,0 +1,23 @@
+.weekView {
+  display: flex;
+  border: 1px solid #ddd;
+}
+
+.weekGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(24, 60px);
+  flex: 1;
+  height: 1440px;
+  overflow-y: scroll;
+  position: relative;
+
+  /* Horizontal grid lines using repeating-linear-gradient */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 59px,
+    #e0e0e0 59px,
+    #e0e0e0 60px
+  );
+}

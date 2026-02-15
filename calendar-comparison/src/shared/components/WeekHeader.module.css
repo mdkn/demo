@@ -1,0 +1,26 @@
+.weekHeader {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.timeLabelSpacer {
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.dayHeader {
+  flex: 1;
+  padding: 8px;
+  text-align: center;
+  border-right: 1px solid #ddd;
+}
+
+.dayHeader.today {
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.dayOfWeek {
+  margin-right: 4px;
+}

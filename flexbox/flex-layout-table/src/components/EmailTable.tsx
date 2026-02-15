@@ -11,12 +11,12 @@ interface EmailTableProps {
   isPreviewOpen: boolean
 }
 
-export default function EmailTable({
+const EmailTable = ({
   emails,
   selectedEmailId,
   onSelectEmail,
   isPreviewOpen,
-}: EmailTableProps) {
+}: EmailTableProps) => {
   return (
     <div
       className={`${styles.tableContainer} ${!isPreviewOpen ? styles.fullWidth : ''}`}
@@ -37,3 +37,5 @@ export default function EmailTable({
     </div>
   )
 }
+
+export default EmailTable

@@ -1,0 +1,17 @@
+.dayColumn {
+  position: relative;
+  flex: 1;
+  min-width: 100px;
+  border-right: 1px solid #ddd;
+  background-color: #ffffff;
+}
+
+.dayColumn.today {
+  filter: brightness(1.05);
+}
+
+/* F5: Drop target highlight during drag */
+.dayColumn.dropTarget {
+  background-color: rgba(59, 130, 246, 0.1);
+  transition: background-color 0.15s ease;
+}

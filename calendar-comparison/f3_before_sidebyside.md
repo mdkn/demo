@@ -1,0 +1,70 @@
+- generic [ref=e3]:
+  - 'heading "Calendar Comparison: Now Indicator (F3)" [level=1] [ref=e4]'
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - button "Absolute Only" [active] [ref=e7] [cursor=pointer]
+      - button "Grid Only" [ref=e8] [cursor=pointer]
+    - button "Reset Sample Data" [ref=e9] [cursor=pointer]
+  - generic [ref=e149]:
+    - heading "Absolute 方式" [level=2] [ref=e150]
+    - generic [ref=e151]:
+      - generic [ref=e153]: 月2/9
+      - generic [ref=e154]: 火2/10
+      - generic [ref=e155]: 水2/11
+      - generic [ref=e156]: 木2/12
+      - generic [ref=e157]: 金2/13
+      - generic [ref=e158]: 土2/14
+      - generic [ref=e159]: 日2/15
+    - generic [ref=e160]:
+      - generic [ref=e161]:
+        - generic [ref=e162]: 0:00
+        - generic [ref=e163]: 1:00
+        - generic [ref=e164]: 2:00
+        - generic [ref=e165]: 3:00
+        - generic [ref=e166]: 4:00
+        - generic [ref=e167]: 5:00
+        - generic [ref=e168]: 6:00
+        - generic [ref=e169]: 7:00
+        - generic [ref=e170]: 8:00
+        - generic [ref=e171]: 9:00
+        - generic [ref=e172]: 10:00
+        - generic [ref=e173]: 11:00
+        - generic [ref=e174]: 12:00
+        - generic [ref=e175]: 13:00
+        - generic [ref=e176]: 14:00
+        - generic [ref=e177]: 15:00
+        - generic [ref=e178]: 16:00
+        - generic [ref=e179]: 17:00
+        - generic [ref=e180]: 18:00
+        - generic [ref=e181]: 19:00
+        - generic [ref=e182]: 20:00
+        - generic [ref=e183]: 21:00
+        - generic [ref=e184]: 22:00
+        - generic [ref=e185]: 23:00
+      - generic [ref=e186]:
+        - generic [ref=e187]:
+          - generic [ref=e188] [cursor=pointer]:
+            - generic [ref=e189]: Event 1
+            - generic [ref=e190]: 9:00 - 12:00
+          - generic [ref=e191] [cursor=pointer]:
+            - generic [ref=e192]: Event 2
+            - generic [ref=e193]: 10:00 - 12:00
+          - generic [ref=e194] [cursor=pointer]:
+            - generic [ref=e195]: Event 5
+            - generic [ref=e196]: 10:00 - 11:00
+          - generic [ref=e197] [cursor=pointer]:
+            - generic [ref=e198]: Event 3
+            - generic [ref=e199]: 11:00 - 13:00
+          - generic [ref=e200] [cursor=pointer]:
+            - generic [ref=e201]: Event 4
+            - generic [ref=e202]: 14:00 - 15:00
+        - generic [ref=e204] [cursor=pointer]:
+          - generic [ref=e205]: Event 6
+          - generic [ref=e206]: 15:00 - 16:00
+        - generic [ref=e207]:
+          - generic [ref=e208] [cursor=pointer]:
+            - generic [ref=e209]: Event 7
+            - generic [ref=e210]: 16:00 - 17:30
+          - generic [ref=e211] [cursor=pointer]:
+            - generic [ref=e212]: Event 8
+            - generic [ref=e213]: 17:00 - 18:00
