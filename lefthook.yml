@@ -1,18 +1,21 @@
 # Lefthook configuration
 # https://github.com/evilmartians/lefthook
+# This configuration applies to the calendar-comparison project only
 
 # pre-commit hook
 pre-commit:
   parallel: true
   commands:
     oxlint:
+      root: "calendar-comparison/"
       glob: "*.{ts,tsx,js,jsx}"
-      run: npx oxlint {staged_files}
+      run: cd calendar-comparison && npx oxlint {staged_files}
       stage_fixed: true
 
     # TypeScript type checking
     typecheck:
-      run: npm run build -- --noEmit
+      root: "calendar-comparison/"
+      run: cd calendar-comparison && npm run build -- --noEmit
       skip:
         - merge
         - rebase
@@ -23,7 +26,8 @@ pre-push:
   commands:
     # Run tests before push
     test:
-      run: npm run test -- --run
+      root: "calendar-comparison/"
+      run: cd calendar-comparison && npm run test -- --run
       skip:
         - merge
         - rebase
