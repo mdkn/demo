@@ -23,12 +23,19 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* Dragging state - active visual feedback */
+/* Dragging state - hide original element, preview will be shown by React */
 .dragging {
-  opacity: 0.7;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Preview state - visual feedback during drag */
+.preview {
+  opacity: 0.8;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   cursor: grabbing;
-  z-index: 1000; /* Ensure dragging event is on top */
+  z-index: 1000;
+  pointer-events: none; /* プレビューはドラッグ不可 */
 }
 
 /* Resizing state - active visual feedback (F6) */

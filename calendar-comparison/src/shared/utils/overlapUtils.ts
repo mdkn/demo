@@ -97,11 +97,28 @@ export const assignColumns = (
 
     for (let col = 0; col < columns.length; col++) {
       const columnEvents = columns[col];
-      // この列の全てのイベントと重ならなければ配置可能
+
+      // Check 1: この列の全てのイベントと重ならなければ配置可能
       const canPlace = columnEvents.every((colEvent) => !eventsOverlap(colEvent, event));
+
       if (canPlace) {
-        assignedColumn = col;
-        break;
+        // Check 2: 配置すると視覚的な隙間が生じないか確認
+        // 現在のイベントと重なる既存のイベントが別の列にある場合、
+        // その列のイベントもこの列のイベントと重なっているか確認
+        const overlappingEventsInOtherColumns = sorted.slice(0, sorted.indexOf(event)).filter(processedEvent =>
+          eventsOverlap(processedEvent, event) &&
+          !columnEvents.some(ce => ce.id === processedEvent.id)
+        );
+
+        const wouldCreateGap = overlappingEventsInOtherColumns.some(otherEvent => {
+          // この列のイベントが otherEvent と重なっていなければギャップが生じる
+          return !columnEvents.some(colEvent => eventsOverlap(colEvent, otherEvent));
+        });
+
+        if (!wouldCreateGap) {
+          assignedColumn = col;
+          break;
+        }
       }
     }
 

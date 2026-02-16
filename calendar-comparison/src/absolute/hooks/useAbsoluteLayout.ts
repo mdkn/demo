@@ -20,22 +20,22 @@ export const useAbsoluteLayout = (
 
   return useMemo(() => {
     // プレビューイベントを作成
+    // 元のイベントは残し、プレビューを追加する（元のイベントはCSSで非表示にする）
     let allEvents = events;
 
     if (dragPreview) {
       const originalEvent = events.find(e => e.id === dragPreview.eventId);
       if (originalEvent) {
-        // 元のイベントを除外
-        const otherEvents = events.filter(e => e.id !== dragPreview.eventId);
-
         // プレビューイベントを作成（仮の時刻を使用）
         const previewEvent: CalendarEvent = {
           ...originalEvent,
+          id: `${originalEvent.id}-preview`,
           startAt: dragPreview.tempStartAt,
           endAt: dragPreview.tempEndAt,
         };
 
-        allEvents = [...otherEvents, previewEvent];
+        // 元のイベントとプレビューの両方を含める
+        allEvents = [...events, previewEvent];
       }
     }
 
