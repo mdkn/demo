@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { CalendarEvent, AbsoluteEventLayout } from '@shared/types';
 import { dateToMinutes } from '@shared/utils/dateUtils';
 import { detectOverlaps, assignColumns } from '@shared/utils/overlapUtils';
+import { useDragPreview } from '@shared/contexts/DragPreviewContext';
 
 const MIN_HEIGHT = 15; // 最小表示高さ（15分相当）
 
@@ -15,11 +16,33 @@ export const useAbsoluteLayout = (
   events: CalendarEvent[],
   hourHeight: number
 ): AbsoluteEventLayout[] => {
+  const { dragPreview } = useDragPreview();
+
   return useMemo(() => {
-    if (events.length === 0) return [];
+    // プレビューイベントを作成
+    let allEvents = events;
+
+    if (dragPreview) {
+      const originalEvent = events.find(e => e.id === dragPreview.eventId);
+      if (originalEvent) {
+        // 元のイベントを除外
+        const otherEvents = events.filter(e => e.id !== dragPreview.eventId);
+
+        // プレビューイベントを作成（仮の時刻を使用）
+        const previewEvent: CalendarEvent = {
+          ...originalEvent,
+          startAt: dragPreview.tempStartAt,
+          endAt: dragPreview.tempEndAt,
+        };
+
+        allEvents = [...otherEvents, previewEvent];
+      }
+    }
+
+    if (allEvents.length === 0) return [];
 
     // 重なりグループを検出
-    const groups = detectOverlaps(events);
+    const groups = detectOverlaps(allEvents);
 
     const layouts: AbsoluteEventLayout[] = [];
 
@@ -59,5 +82,5 @@ export const useAbsoluteLayout = (
     }
 
     return layouts;
-  }, [events, hourHeight]);
+  }, [events, dragPreview, hourHeight]);
 };

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { CalendarEvent, GridEventLayout } from '@shared/types';
 import { dateToMinutes } from '@shared/utils/dateUtils';
 import { detectOverlaps, assignColumns, calculateLCM } from '@shared/utils/overlapUtils';
+import { useDragPreview } from '@shared/contexts/DragPreviewContext';
 
 const MIN_DURATION = 15; // 最小イベント長（15分）
 
@@ -13,13 +14,35 @@ const MIN_DURATION = 15; // 最小イベント長（15分）
 export const useGridLayout = (
   events: CalendarEvent[]
 ): { layouts: GridEventLayout[]; totalColumns: number } => {
+  const { dragPreview } = useDragPreview();
+
   return useMemo(() => {
-    if (events.length === 0) {
+    // プレビューイベントを作成
+    let allEvents = events;
+
+    if (dragPreview) {
+      const originalEvent = events.find(e => e.id === dragPreview.eventId);
+      if (originalEvent) {
+        // 元のイベントを除外
+        const otherEvents = events.filter(e => e.id !== dragPreview.eventId);
+
+        // プレビューイベントを作成（仮の時刻を使用）
+        const previewEvent: CalendarEvent = {
+          ...originalEvent,
+          startAt: dragPreview.tempStartAt,
+          endAt: dragPreview.tempEndAt,
+        };
+
+        allEvents = [...otherEvents, previewEvent];
+      }
+    }
+
+    if (allEvents.length === 0) {
       return { layouts: [], totalColumns: 1 };
     }
 
     // 重なりグループを検出
-    const groups = detectOverlaps(events);
+    const groups = detectOverlaps(allEvents);
 
     // 各グループの列数を収集
     const columnCounts = groups.map((group) => assignColumns(group)[0].totalColumns);
@@ -59,5 +82,5 @@ export const useGridLayout = (
     }
 
     return { layouts, totalColumns };
-  }, [events]);
+  }, [events, dragPreview]);
 };
