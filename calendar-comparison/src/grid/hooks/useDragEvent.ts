@@ -161,10 +161,10 @@ export const useDragEvent = ({
         // F4: Update grid-row-start (1-indexed)
         elementRef.current.style.gridRowStart = String(newStartMinutes + 1);
 
-        // F5: Update grid-column-start (1-indexed, column 1 = day 0)
-        if (currentDayIndex !== null) {
-          elementRef.current.style.gridColumnStart = String(currentDayIndex + 1);
-        }
+        // Note: gridColumnStart should NOT be modified during drag
+        // Each DayGrid is independent, and gridColumn represents the overlap
+        // calculation result within that day, not the day index.
+        // Cross-day dragging moves the event to a different DayGrid component.
       }
     };
 
