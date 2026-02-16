@@ -9,13 +9,15 @@ pre-commit:
     oxlint:
       root: "calendar-comparison/"
       glob: "*.{ts,tsx,js,jsx}"
-      run: cd calendar-comparison && npx oxlint {staged_files}
+      run: |
+        cd "{root}" && npx oxlint {staged_files}
       stage_fixed: true
 
     # TypeScript type checking
     typecheck:
       root: "calendar-comparison/"
-      run: cd calendar-comparison && npm run build -- --noEmit
+      run: |
+        cd "{root}" && npm run build -- --noEmit
       skip:
         - merge
         - rebase
@@ -27,7 +29,8 @@ pre-push:
     # Run tests before push
     test:
       root: "calendar-comparison/"
-      run: cd calendar-comparison && npm run test -- --run
+      run: |
+        cd "{root}" && npm run test -- --run
       skip:
         - merge
         - rebase
