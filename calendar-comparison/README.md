@@ -10,6 +10,8 @@
 - **date-fns** 4.1.0 - 日付操作ライブラリ
 - **Vitest** 4.0.18 - ユニットテストフレームワーク
 - **CSS Modules** - スタイリング（CSS-in-JS は不使用）
+- **oxlint** 1.48.0 - 高速 Rust ベースのリンター
+- **lefthook** 2.1.1 - Git フック管理ツール
 
 ## セットアップ
 
@@ -50,6 +52,54 @@ npm test
 # ビルドチェック（TypeScript strict mode）
 npm run build
 ```
+
+### コード品質
+
+#### Linting
+
+プロジェクトでは高速な Rust ベースのリンター **oxlint** を使用しています：
+
+```bash
+# oxlint でコードをチェック
+npm run lint:ox
+
+# 自動修正可能な問題を修正
+npm run lint:fix
+
+# 従来の ESLint も利用可能
+npm run lint
+```
+
+**oxlint の特徴：**
+- ⚡ ESLint の 50-100倍の速度
+- 🦀 Rust で実装された高速なリンター
+- 🎯 React, TypeScript, JSX a11y ルールをサポート
+- 🔧 自動修正機能
+
+#### Git Hooks
+
+**lefthook** を使用して Git フックを管理しています：
+
+```bash
+# Git hooks をインストール（自動実行済み）
+npm run hooks:install
+
+# Git hooks をアンインストール
+npm run hooks:uninstall
+```
+
+**自動実行される検証：**
+
+| フック | タイミング | 実行内容 |
+|--------|-----------|---------|
+| pre-commit | コミット前 | oxlint（変更ファイルのみ）+ 型チェック |
+| pre-push | プッシュ前 | 全テストの実行 |
+
+**メリット：**
+- 🚀 コミット前に自動でコード品質をチェック
+- 🧪 プッシュ前にテストを自動実行
+- 🔒 品質問題のある変更をブロック
+- ⚡ 並列実行で高速
 
 ## プロジェクト構成
 

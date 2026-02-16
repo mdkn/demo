@@ -1,0 +1,36 @@
+# Lefthook configuration
+# https://github.com/evilmartians/lefthook
+
+# pre-commit hook
+pre-commit:
+  parallel: true
+  commands:
+    oxlint:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: npx oxlint {staged_files}
+      stage_fixed: true
+
+    # TypeScript type checking
+    typecheck:
+      run: npm run build -- --noEmit
+      skip:
+        - merge
+        - rebase
+
+# pre-push hook
+pre-push:
+  parallel: false
+  commands:
+    # Run tests before push
+    test:
+      run: npm run test -- --run
+      skip:
+        - merge
+        - rebase
+
+# commit-msg hook
+commit-msg:
+  commands:
+    # Validate commit message format (optional)
+    # commitlint:
+    #   run: npx commitlint --edit {1}
