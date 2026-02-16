@@ -15,7 +15,7 @@ pre-commit:
     # TypeScript type checking
     typecheck:
       root: "calendar-comparison/"
-      run: npm run build -- --noEmit
+      run: npx tsc --noEmit
       skip:
         - merge
         - rebase
