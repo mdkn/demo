@@ -54,7 +54,14 @@ export const EventBlock = ({
   const showTime = duration > 30;
 
   // Determine CSS class based on state
-  const stateClass = isResizing ? styles.resizing : isDragging ? styles.dragging : styles.grabbable;
+  const isPreview = event.id.endsWith('-preview');
+  const stateClass = isResizing
+    ? styles.resizing
+    : isDragging
+    ? styles.dragging
+    : isPreview
+    ? styles.preview
+    : styles.grabbable;
 
   return (
     <>

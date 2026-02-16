@@ -7,8 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:ox": "oxlint",
+    "lint:fix": "oxlint --fix",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "prepare": "lefthook install",
+    "hooks:install": "lefthook install",
+    "hooks:uninstall": "lefthook uninstall"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
@@ -28,6 +33,8 @@
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
     "jsdom": "^28.0.0",
+    "lefthook": "^2.1.1",
+    "oxlint": "^1.48.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.7",

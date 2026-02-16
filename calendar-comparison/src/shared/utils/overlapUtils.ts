@@ -91,17 +91,54 @@ export const assignColumns = (
   const columns: CalendarEvent[][] = [];
   const result: EventWithColumn[] = [];
 
-  for (const event of sorted) {
-    // 空いている列を探す
+  // 最適化: イベントIDから列番号へのマップ（O(1)で列を特定）
+  const eventColumnMap = new Map<string, number>();
+
+  // index付きループで処理（indexOf を排除）
+  for (let i = 0; i < sorted.length; i++) {
+    const event = sorted[i];
     let assignedColumn = -1;
 
+    // 空いている列を探す
     for (let col = 0; col < columns.length; col++) {
       const columnEvents = columns[col];
-      // この列の全てのイベントと重ならなければ配置可能
+
+      // Check 1: この列の全てのイベントと重ならなければ配置可能
       const canPlace = columnEvents.every((colEvent) => !eventsOverlap(colEvent, event));
+
       if (canPlace) {
-        assignedColumn = col;
-        break;
+        // Check 2: 配置すると視覚的な隙間が生じないか確認
+        // 最適化: 処理済みイベント（sorted[0..i-1]）のみを走査
+        let wouldCreateGap = false;
+
+        for (let j = 0; j < i; j++) {
+          const processedEvent = sorted[j];
+
+          // 現在のイベントと重なる & この列にない処理済みイベント
+          if (eventsOverlap(processedEvent, event)) {
+            const processedCol = eventColumnMap.get(processedEvent.id);
+            if (processedCol !== col) {
+              // この列のイベントが processedEvent と重なっているか確認
+              let hasOverlap = false;
+              for (let k = 0; k < columnEvents.length; k++) {
+                if (eventsOverlap(columnEvents[k], processedEvent)) {
+                  hasOverlap = true;
+                  break;
+                }
+              }
+
+              if (!hasOverlap) {
+                wouldCreateGap = true;
+                break;
+              }
+            }
+          }
+        }
+
+        if (!wouldCreateGap) {
+          assignedColumn = col;
+          break;
+        }
       }
     }
 
@@ -112,6 +149,7 @@ export const assignColumns = (
     }
 
     columns[assignedColumn].push(event);
+    eventColumnMap.set(event.id, assignedColumn);
   }
 
   // 結果を生成

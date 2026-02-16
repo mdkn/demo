@@ -1,0 +1,70 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      calendar-comparison: ${{ steps.filter.outputs.calendar-comparison }}
+      grid-layout: ${{ steps.filter.outputs.grid-layout }}
+      treegrid: ${{ steps.filter.outputs.treegrid }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            calendar-comparison:
+              - 'calendar-comparison/**'
+            grid-layout:
+              - 'grid-layout/**'
+            treegrid:
+              - 'treegrid/**'
+
+  test-calendar-comparison:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.calendar-comparison == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: calendar-comparison
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run lint
+      - run: npm test
+
+  test-grid-layout:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.grid-layout == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: grid-layout
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build
+
+  test-treegrid:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.treegrid == 'true' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: treegrid
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run build
