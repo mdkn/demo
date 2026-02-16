@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useGridLayout } from './useGridLayout';
-import { DragPreviewProvider } from '@shared/contexts/DragPreviewContext';
+import { DragPreviewProvider, useDragPreviewActions } from '@shared/contexts/DragPreviewContext';
 import type { CalendarEvent } from '@shared/types';
 
 const createEvent = (
@@ -92,22 +92,206 @@ describe('useGridLayout', () => {
   });
 
   describe('プレビューありの場合', () => {
-    it('プレビューイベントを含めてレイアウト計算する', () => {
-      // この テストは Context を使って dragPreview を設定する必要があるため、
-      // 統合テストとして別途実装する
-      // ここでは基本的な動作確認のみ
+    it('プレビューイベントがレイアウトに反映される', () => {
       const events = [
         createEvent('1', '2026-02-17T10:00:00', '2026-02-17T11:00:00'),
       ];
 
       const { result } = renderHook(
-        () => useGridLayout(events),
+        () => {
+          const actions = useDragPreviewActions();
+          const layout = useGridLayout(events);
+          return { actions, ...layout };
+        },
         { wrapper: DragPreviewProvider }
       );
 
-      // プレビューなしでも正常に動作する
+      // 初期状態：1つのイベント
       expect(result.current.layouts).toHaveLength(1);
+      expect(result.current.layouts[0].event.id).toBe('1');
+
+      // dragPreviewを設定
+      act(() => {
+        result.current.actions.updateDragPreview('1', {
+          tempStartAt: '2026-02-17T14:00:00',  // 14:00に移動
+          tempEndAt: '2026-02-17T15:00:00',
+        });
+      });
+
+      // プレビューイベントが追加される（元イベント + プレビュー = 2つ）
+      expect(result.current.layouts).toHaveLength(2);
+
+      // 元イベント（id: '1'）
+      const originalEvent = result.current.layouts.find(l => l.event.id === '1');
+      expect(originalEvent).toBeDefined();
+      expect(originalEvent!.gridRow).toBe('600 / span 60'); // 10:00 (600分) から 60分間
+
+      // プレビューイベント（id: '1-preview'）
+      const previewEvent = result.current.layouts.find(l => l.event.id === '1-preview');
+      expect(previewEvent).toBeDefined();
+      expect(previewEvent!.gridRow).toBe('840 / span 60'); // 14:00 (840分) から 60分間
+    });
+
+    it('元イベントとプレビューが重ならない場合、それぞれ1列になる', () => {
+      const events = [
+        createEvent('1', '2026-02-17T10:00:00', '2026-02-17T11:00:00'),
+      ];
+
+      const { result } = renderHook(
+        () => {
+          const actions = useDragPreviewActions();
+          const layout = useGridLayout(events);
+          return { actions, ...layout };
+        },
+        { wrapper: DragPreviewProvider }
+      );
+
+      // dragPreviewを設定（重ならない位置）
+      act(() => {
+        result.current.actions.updateDragPreview('1', {
+          tempStartAt: '2026-02-17T14:00:00',  // 14:00（重ならない）
+          tempEndAt: '2026-02-17T15:00:00',
+        });
+      });
+
+      expect(result.current.layouts).toHaveLength(2);
       expect(result.current.totalColumns).toBe(1);
+
+      // 両方とも列1
+      expect(result.current.layouts[0].gridColumn).toBe(1);
+      expect(result.current.layouts[1].gridColumn).toBe(1);
+    });
+
+    it('元イベントとプレビューが重なる場合、2列に分かれる', () => {
+      const events = [
+        createEvent('1', '2026-02-17T10:00:00', '2026-02-17T11:00:00'),
+      ];
+
+      const { result } = renderHook(
+        () => {
+          const actions = useDragPreviewActions();
+          const layout = useGridLayout(events);
+          return { actions, ...layout };
+        },
+        { wrapper: DragPreviewProvider }
+      );
+
+      // dragPreviewを設定（重なる位置）
+      act(() => {
+        result.current.actions.updateDragPreview('1', {
+          tempStartAt: '2026-02-17T10:30:00',  // 10:30（重なる）
+          tempEndAt: '2026-02-17T11:30:00',
+        });
+      });
+
+      expect(result.current.layouts).toHaveLength(2);
+      expect(result.current.totalColumns).toBe(2);
+
+      // 元イベント（id: '1'）は列1
+      const originalEvent = result.current.layouts.find(l => l.event.id === '1');
+      expect(originalEvent!.gridColumn).toBe(1);
+
+      // プレビューイベント（id: '1-preview'）は列2
+      const previewEvent = result.current.layouts.find(l => l.event.id === '1-preview');
+      expect(previewEvent!.gridColumn).toBe(2);
+    });
+
+    it('プレビューと他のイベントが重なる場合、正しく列が割り当てられる', () => {
+      const events = [
+        createEvent('1', '2026-02-17T10:00:00', '2026-02-17T11:00:00'),
+        createEvent('2', '2026-02-17T10:30:00', '2026-02-17T11:30:00'),
+      ];
+
+      const { result } = renderHook(
+        () => {
+          const actions = useDragPreviewActions();
+          const layout = useGridLayout(events);
+          return { actions, ...layout };
+        },
+        { wrapper: DragPreviewProvider }
+      );
+
+      // イベント2をドラッグして、イベント1と2の間に配置
+      act(() => {
+        result.current.actions.updateDragPreview('2', {
+          tempStartAt: '2026-02-17T10:15:00',  // 10:15（全て重なる）
+          tempEndAt: '2026-02-17T11:15:00',
+        });
+      });
+
+      // 元イベント1、元イベント2、プレビューイベント2 = 3つ
+      expect(result.current.layouts).toHaveLength(3);
+
+      // 全て重なるので3列必要
+      expect(result.current.totalColumns).toBe(3);
+    });
+
+    it('clearDragPreview後は元の状態に戻る', () => {
+      const events = [
+        createEvent('1', '2026-02-17T10:00:00', '2026-02-17T11:00:00'),
+      ];
+
+      const { result } = renderHook(
+        () => {
+          const actions = useDragPreviewActions();
+          const layout = useGridLayout(events);
+          return { actions, ...layout };
+        },
+        { wrapper: DragPreviewProvider }
+      );
+
+      // dragPreviewを設定
+      act(() => {
+        result.current.actions.updateDragPreview('1', {
+          tempStartAt: '2026-02-17T14:00:00',
+          tempEndAt: '2026-02-17T15:00:00',
+        });
+      });
+
+      expect(result.current.layouts).toHaveLength(2);
+
+      // clearDragPreview
+      act(() => {
+        result.current.actions.clearDragPreview();
+      });
+
+      // 元の1つに戻る
+      expect(result.current.layouts).toHaveLength(1);
+      expect(result.current.layouts[0].event.id).toBe('1');
+      expect(result.current.totalColumns).toBe(1);
+    });
+
+    it('プレビューイベントのプロパティが正しくコピーされる', () => {
+      const events = [
+        createEvent('1', '2026-02-17T10:00:00', '2026-02-17T11:00:00'),
+      ];
+
+      const { result } = renderHook(
+        () => {
+          const actions = useDragPreviewActions();
+          const layout = useGridLayout(events);
+          return { actions, ...layout };
+        },
+        { wrapper: DragPreviewProvider }
+      );
+
+      act(() => {
+        result.current.actions.updateDragPreview('1', {
+          tempStartAt: '2026-02-17T14:00:00',
+          tempEndAt: '2026-02-17T15:00:00',
+        });
+      });
+
+      const previewEvent = result.current.layouts.find(l => l.event.id === '1-preview');
+      expect(previewEvent).toBeDefined();
+
+      // 元イベントのプロパティが継承される
+      expect(previewEvent!.event.title).toBe('Event 1');
+      expect(previewEvent!.event.color).toBe('#3b82f6');
+
+      // プレビュー用の新しい時刻
+      expect(previewEvent!.event.startAt).toBe('2026-02-17T14:00:00');
+      expect(previewEvent!.event.endAt).toBe('2026-02-17T15:00:00');
     });
   });
 

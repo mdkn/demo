@@ -109,6 +109,27 @@ describe('overlapUtils', () => {
       expect(result[1].column).toBe(0);
       expect(result[0].totalColumns).toBe(1);
     });
+
+    it('連鎖的に重なるイベントで列のギャップを生じさせない', () => {
+      const events = [
+        // A overlaps B, B overlaps C, A does not overlap C (境界で接するのみ)
+        createEvent('A', '2026-02-14T10:00:00', '2026-02-14T11:00:00'),
+        createEvent('B', '2026-02-14T10:30:00', '2026-02-14T11:30:00'),
+        createEvent('C', '2026-02-14T11:00:00', '2026-02-14T12:00:00'),
+      ];
+      const result = assignColumns(events);
+      expect(result).toHaveLength(3);
+      const eventA = result.find((e) => e.event.id === 'A');
+      const eventB = result.find((e) => e.event.id === 'B');
+      const eventC = result.find((e) => e.event.id === 'C');
+      expect(eventA?.column).toBe(0);
+      expect(eventB?.column).toBe(1);
+      // C should reuse the freed column from A so that columns are [0, 1] without gaps
+      expect(eventC?.column).toBe(0);
+      result.forEach((e) => {
+        expect(e.totalColumns).toBe(2);
+      });
+    });
   });
 
   describe('calculateLCM', () => {

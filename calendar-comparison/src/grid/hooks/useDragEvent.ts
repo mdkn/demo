@@ -8,7 +8,7 @@ import {
   pxToDayIndex,
   calculateNewDate,
 } from '@shared/utils/dragUtils';
-import { useDragPreview } from '@shared/contexts/DragPreviewContext';
+import { useDragPreviewActions } from '@shared/contexts/DragPreviewContext';
 import { createRafThrottle } from '@shared/utils/rafThrottle';
 
 type DragState = {
@@ -47,15 +47,15 @@ export const useDragEvent = ({
   const pointerIdRef = useRef<number | null>(null);
   const dayColumnRectsRef = useRef<DOMRect[]>([]);
 
-  // F8: Get drag preview functions
-  const { updateDragPreview, clearDragPreview } = useDragPreview();
+  // F8: Get drag preview actions (actionsのみ取得で再レンダーを回避)
+  const { updateDragPreview, clearDragPreview } = useDragPreviewActions();
 
   // Calculate event duration in minutes
   const durationMinutes =
     dateToMinutes(event.endAt) - dateToMinutes(event.startAt);
 
   // F8: Create RAF-throttled preview update function
-  const throttledUpdate = useMemo(
+  const { throttled: throttledUpdate, cancel: cancelUpdate } = useMemo(
     () => createRafThrottle(updateDragPreview),
     [updateDragPreview]
   );
@@ -219,7 +219,8 @@ export const useDragEvent = ({
         newEndAt = calculateNewDate(newEndAt, finalDayIndex, dragState.startDayIndex);
       }
 
-      // F8: Clear drag preview before updating actual event
+      // F8: Cancel pending RAF and clear drag preview before updating actual event
+      cancelUpdate();
       clearDragPreview();
 
       // Update event through callback
@@ -260,7 +261,8 @@ export const useDragEvent = ({
       if (e.key === 'Escape') {
         e.preventDefault();
 
-        // F8: Clear drag preview
+        // F8: Cancel pending RAF and clear drag preview
+        cancelUpdate();
         clearDragPreview();
 
         // Restore original position
@@ -292,7 +294,7 @@ export const useDragEvent = ({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [dragState, onDayHover, clearDragPreview]);
+  }, [dragState, onDayHover, cancelUpdate, clearDragPreview]);
 
   /**
    * Handle pointer cancel - cleanup on unexpected cancellation
@@ -306,7 +308,8 @@ export const useDragEvent = ({
     const handlePointerCancel = (e: PointerEvent) => {
       e.preventDefault();
 
-      // F8: Clear drag preview
+      // F8: Cancel pending RAF and clear drag preview
+      cancelUpdate();
       clearDragPreview();
 
       // Restore original position
@@ -332,7 +335,7 @@ export const useDragEvent = ({
     return () => {
       document.removeEventListener('pointercancel', handlePointerCancel);
     };
-  }, [dragState, onDayHover, clearDragPreview]);
+  }, [dragState, onDayHover, cancelUpdate, clearDragPreview]);
 
   return {
     isDragging: dragState?.isDragging ?? false,

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import type { CalendarEvent, GridEventLayout } from '@shared/types';
 import { dateToMinutes } from '@shared/utils/dateUtils';
 import { detectOverlaps, assignColumns, calculateLCM } from '@shared/utils/overlapUtils';
-import { useDragPreview } from '@shared/contexts/DragPreviewContext';
+import { useDragPreviewState } from '@shared/contexts/DragPreviewContext';
 
 const MIN_DURATION = 15; // 最小イベント長（15分）
 
@@ -14,7 +14,7 @@ const MIN_DURATION = 15; // 最小イベント長（15分）
 export const useGridLayout = (
   events: CalendarEvent[]
 ): { layouts: GridEventLayout[]; totalColumns: number } => {
-  const { dragPreview } = useDragPreview();
+  const { dragPreview } = useDragPreviewState();
 
   return useMemo(() => {
     // プレビューイベントを作成
