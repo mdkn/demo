@@ -1,7 +1,7 @@
 // EmailTableHeader component with SCSS Modules
 import styles from './EmailTableHeader.module.scss'
 
-export default function EmailTableHeader() {
+const EmailTableHeader = () => {
   return (
     <thead className={styles.tableHeader}>
       <tr className={styles.headerRow}>
@@ -13,3 +13,5 @@ export default function EmailTableHeader() {
     </thead>
   )
 }
+
+export default EmailTableHeader

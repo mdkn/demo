@@ -9,7 +9,7 @@ interface EmailRowProps {
   onClick: () => void
 }
 
-export default function EmailRow({ email, isSelected, onClick }: EmailRowProps) {
+const EmailRow = ({ email, isSelected, onClick }: EmailRowProps) => {
   const rowClasses = `
     ${styles.row}
     ${isSelected ? styles.selected : ''}
@@ -37,3 +37,5 @@ export default function EmailRow({ email, isSelected, onClick }: EmailRowProps) 
     </tr>
   )
 }
+
+export default EmailRow

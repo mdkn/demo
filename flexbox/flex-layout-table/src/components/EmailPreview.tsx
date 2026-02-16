@@ -6,7 +6,7 @@ interface EmailPreviewProps {
   email: Email
 }
 
-export default function EmailPreview({ email }: EmailPreviewProps) {
+export const EmailPreview = ({ email }: EmailPreviewProps) => {
   return (
     <div className={styles.previewContainer}>
       <h2 className={styles.senderName}>{email.senderName}</h2>
@@ -40,3 +40,5 @@ export default function EmailPreview({ email }: EmailPreviewProps) {
     </div>
   )
 }
+
+export default EmailPreview
