@@ -246,7 +246,7 @@ export const useDragEvent = ({
     return () => {
       document.removeEventListener('pointerup', handlePointerUp);
     };
-  }, [dragState, event, onUpdate, durationMinutes, containerRef, onDayHover, clearDragPreview]);
+  }, [dragState, event, onUpdate, durationMinutes, containerRef, onDayHover, cancelUpdate, clearDragPreview]);
 
   /**
    * Handle Escape key - cancel drag
